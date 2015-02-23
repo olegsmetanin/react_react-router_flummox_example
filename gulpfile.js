@@ -5,7 +5,7 @@ var gulp = require('gulp'),
     babelify = require("babelify"),
     source = require('vinyl-source-stream'),
     exorcist = require('exorcist'),
-    requireToReqwire = require('./gulp/requireToReqwire.js');
+    uglifyify = require('uglifyify');
 
 var dest = './dest';
 
@@ -15,8 +15,8 @@ gulp.task('apps', function() {
             debug: true
         })
         .transform(babelify.configure({
-            experimental: true,
-            optional: ['asyncToGenerator']
+            experimental: true//,
+            //optional: ['asyncToGenerator']
         }))
         .require('./src/assets/js/apps/apps.js', {
             expose: 'apps'
@@ -24,6 +24,7 @@ gulp.task('apps', function() {
         .external('react')
         .external('react-router')
         .external('flummox')
+        .external('cheerio')
 
     return bundler.bundle()
         .on('error', function(err) {
@@ -39,8 +40,11 @@ gulp.task('apps', function() {
 gulp.task('lib', function() {
 
     var bundler = browserify({
-            debug: true
+            debug: false
         })
+        .transform({
+            global: true
+        }, 'uglifyify')
         .require('./node_modules/react/dist/react.js', {
             expose: 'react'
         })
@@ -49,6 +53,9 @@ gulp.task('lib', function() {
         })
         .require('./node_modules/flummox/lib/Flux.js', {
             expose: 'flummox'
+        })
+        .require('./node_modules/cheerio/index.js', {
+            expose: 'cheerio'
         });
 
     return bundler.bundle()
@@ -59,28 +66,6 @@ gulp.task('lib', function() {
         .pipe(exorcist(dest + '/assets/js/lib.js.map'))
         .pipe(source('lib.js'))
         .pipe(gulp.dest(dest + '/assets/js'));
-
-});
-
-gulp.task('server', function() {
-
-    var bundler = browserify({
-            debug: true
-        })
-        .transform(babelify.configure({
-            experimental: true,
-            optional: ['asyncToGenerator']
-        }))
-        .require('./src/assets/js/apps/server.js', {  expose: 'apps' })
-
-    return bundler.bundle()
-        .on('error', function(err) {
-            console.log(err.toString());
-            this.emit('end');
-        })
-        .pipe(source('lib.js'))
-        .pipe(requireToReqwire())
-        .pipe(gulp.dest('./server'));
 
 });
 
@@ -95,4 +80,4 @@ gulp.task('watch', function() {
     gulp.watch(['./src/**', '!./src/assets/**'], ['html']);
 });
 
-gulp.task('default', ['apps', 'lib', 'server', 'html', 'watch']);
+gulp.task('default', ['apps', 'lib', 'html', 'watch']);

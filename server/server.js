@@ -2,12 +2,12 @@ var bodyParser = require('body-parser')
 
 var express = require('express');
 
-require('./lib.js');
-var apps = reqwire('apps');
-
 var app = express();
 
-app.get('/', apps.firstapp);
+var firstapp = require('./../src/assets/js/apps/firstapp/server.jsx');
+
+app.get('/', firstapp);
+
 app.use(express.static('./dest'));
 
 app.listen(8080);

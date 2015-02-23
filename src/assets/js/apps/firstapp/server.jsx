@@ -9,7 +9,6 @@ export default function (req, res) {
 
   Router.run(routes, req.url, function (Handler, state) {
     
-
     async function run() {
 
       await performRouteHandlerStaticMethod(state.routes, 'routerWillRun', state, flux);
@@ -17,7 +16,9 @@ export default function (req, res) {
       React.withContext(
         { flux },
         () => {
+          
           let content = React.renderToString(<Handler />);
+
           res
             .set('Content-Type', 'text/html')
             .status(200)
@@ -36,7 +37,7 @@ export default function (req, res) {
                 <script type="text/javascript" src="assets/js/lib.js"></script>
                 <script type="text/javascript" src="assets/js/apps.js"></script>
                 <script>
-                require('apps').firstapp();
+                require('apps').firstapp('app');
                 </script>
               </body>
             </html>`)

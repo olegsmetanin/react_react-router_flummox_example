@@ -3,16 +3,31 @@ import React from 'react';
 import Router from 'react-router';
 import { Route, RouteHandler, DefaultRoute, HistoryLocation, State } from 'react-router'; 
 import { Flummox, Actions, Store } from 'flummox';
+import from './utils.js'
+import request from 'superagent';
+//import data from './data.js';
+import from 'babel/polyfill';
+
+var delay = (time) => new Promise(resolve => setTimeout(resolve, time));
 
 // Actions
-
-var delay = time => new Promise(resolve => setTimeout(resolve, time));
   
 class AppActions extends Actions {
 
   async getAllItems() { 
-    await delay(1000);
-    return {items:[{"time": new Date()}]};
+    
+    let response = await request
+      .get(`https://api.github.com/search/repositories?q=git`)
+      .query({
+        per_page: 50,
+      })
+      .exec();
+
+    return response.body.items;
+    // await delay(1000);
+    // return data.items;
+
+
   }
 
   async addNewItem(item) { 
@@ -40,7 +55,7 @@ class AppStore extends Store {
   }
 
   handleGetAllItems(items) {
-    this.setState(items)
+    this.setState({items:items})
   }
 
   handleAddNewItem(item) {
@@ -75,7 +90,6 @@ let HomeHandler = React.createClass({
   statics: {
     async routerWillRun(state, flux) {
       let appActions = flux.getActions('appActions');
-
       return await appActions.getAllItems();
     }
   },
@@ -86,9 +100,7 @@ let HomeHandler = React.createClass({
 
   getInitialState() {
     this.AppStore = this.context.flux.getStore('appStore');
-    return {
-      items: this.AppStore.getAllItems()
-    }
+    return {items:this.AppStore.getAllItems()};
   },
 
   componentDidMount() {
@@ -100,24 +112,35 @@ let HomeHandler = React.createClass({
   },
 
   onAppStoreChange () {
-    this.setState({
-      items: this.AppStore.getAllItems()
-    });
+    this.setState({items:this.AppStore.getAllItems()});
   },
 
   handleClick () {
-    let appActions = this.context.flux.getActions('appActions');
-    appActions.addNewItem({"time": new Date()});
+    //let appActions = this.context.flux.getActions('appActions');
+    //appActions.addNewItem({"time": new Date()});
   },
 
+
+
   render() {
-    
-    let currentState = JSON.stringify(this.state);
+
+    let items = this.state.items;
 
     return (
       <div>
-      Home Page
-      <div>{currentState}</div>
+      Repo List
+      <div>
+        {items.map(function(item) {
+          return <div key={item.id}>
+          <div>
+          <img src={item.owner.avatar_url}/>
+          </div>
+          <div>
+            {item.description}
+          </div>
+          </div>;
+        })}
+      </div>
       <button onClick={this.handleClick}>async update</button>
       </div>
       );
