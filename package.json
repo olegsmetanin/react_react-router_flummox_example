@@ -1,0 +1,20 @@
+{
+    "name": "react_react-router_flummox_example",
+    "version": "0.0.1",
+    "dependencies": {},
+    "devDependencies": {
+        "gulp": "latest",
+        "browserify": "latest",
+        "react": "latest",
+        "react-router": "latest",
+        "flummox": "latest",
+        "babelify": "latest",
+        "exorcist": "latest",
+
+        "vinyl-source-stream": "latest"
+    },
+    "engines": {
+        "node": ">=0.10.0"
+    },
+    "browser": {}
+}
