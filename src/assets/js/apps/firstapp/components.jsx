@@ -126,7 +126,7 @@ let HomeHandler = React.createClass({
 
 // routes
 
-let routes = (
+export let routes = (
   <Route handler={AppHandler}>
     <DefaultRoute handler={HomeHandler} />
     <Route name="home" path="/" handler={HomeHandler}/>
@@ -136,7 +136,7 @@ let routes = (
 
 // Flux
 
-class Flux extends Flummox {
+export class Flux extends Flummox {
   constructor() {
     super();
 
@@ -148,37 +148,10 @@ class Flux extends Flummox {
 
 // Router.run!
 
-async function performRouteHandlerStaticMethod(routes, methodName, ...args) {
+export async function performRouteHandlerStaticMethod(routes, methodName, ...args) {
   return Promise.all(routes
     .map(route => route.handler[methodName])
     .filter(method => typeof method === 'function')
     .map(method => method(...args))
     );
-}
-
-
-module.exports = () => {
-
-  let flux = new Flux();
-
-  Router.run(routes, (Handler, state) => {
-
-    async function run() {
-
-      await performRouteHandlerStaticMethod(state.routes, 'routerWillRun', state, flux);
-
-      React.withContext(
-        { flux },
-        () => React.render(<Handler />, document.body)
-        );
-    }
-
-
-    run().catch(error => {
-      throw error;
-    });
-
-  })
-
-
 }

@@ -1,17 +1,24 @@
 {
-    "name": "react_react-router_flummox_example",
+    "name": "react_react-router_flummox_browserify_example",
     "version": "0.0.1",
     "dependencies": {},
     "devDependencies": {
         "gulp": "latest",
         "browserify": "latest",
+        "babelify": "latest",
+        "exorcist": "latest",
+        "vinyl-source-stream": "latest",
+        "through2": "latest",
+        "gulp-util": "latest",
+        "bufferstreams": "latest",
+
+        "express": "latest",
+        "body-parser": "latest",
+
         "react": "latest",
         "react-router": "latest",
         "flummox": "latest",
-        "babelify": "latest",
-        "exorcist": "latest",
-
-        "vinyl-source-stream": "latest"
+        "superagent": "latest"
     },
     "engines": {
         "node": ">=0.10.0"

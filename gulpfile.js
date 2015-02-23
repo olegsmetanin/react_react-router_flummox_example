@@ -4,7 +4,8 @@ var gulp = require('gulp'),
     browserify = require('browserify'),
     babelify = require("babelify"),
     source = require('vinyl-source-stream'),
-    exorcist = require('exorcist');
+    exorcist = require('exorcist'),
+    requireToReqwire = require('./gulp/requireToReqwire.js');
 
 var dest = './dest';
 
@@ -61,6 +62,28 @@ gulp.task('lib', function() {
 
 });
 
+gulp.task('server', function() {
+
+    var bundler = browserify({
+            debug: true
+        })
+        .transform(babelify.configure({
+            experimental: true,
+            optional: ['asyncToGenerator']
+        }))
+        .require('./src/assets/js/apps/server.js', {  expose: 'apps' })
+
+    return bundler.bundle()
+        .on('error', function(err) {
+            console.log(err.toString());
+            this.emit('end');
+        })
+        .pipe(source('lib.js'))
+        .pipe(requireToReqwire())
+        .pipe(gulp.dest('./server'));
+
+});
+
 gulp.task('html', function() {
     return gulp.src(['./src/**', '!./src/assets/**'])
         .pipe(gulp.dest(dest));
@@ -72,4 +95,4 @@ gulp.task('watch', function() {
     gulp.watch(['./src/**', '!./src/assets/**'], ['html']);
 });
 
-gulp.task('default', ['apps', 'lib', 'html', 'watch']);
+gulp.task('default', ['apps', 'lib', 'server', 'html', 'watch']);

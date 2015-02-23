@@ -1,6 +1,8 @@
 'use strict';
 /*jslint browser: true, unused: false */
 
-module.exports = {
-    index: require('./firstapp/index.jsx')
+import firstapp from './firstapp/index.jsx';
+
+export {
+    firstapp
 };
