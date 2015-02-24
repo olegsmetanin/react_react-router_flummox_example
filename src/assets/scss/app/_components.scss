@@ -1,11 +1,26 @@
+a.fork {
+        padding:10px;
+        position:fixed;
+        top:10px;
+        right:30px;
+        color: #E64A19;
+        border-radius: 30px;
+        background-color:#fff;
+        font-size:30px;
+        @include box-shadow-2(0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12));
+        z-index:9999;
+        @include opacity(0.9);
+}
+
 div.header {
     display: block;
     text-align: center;
-    width: 100%;
+    width: auto;
     font-size: 30px;
     font-weight: 500;
     color: #E64A19;
-    margin: 10px;
+    padding: 10px;
+
 }
 
 div.searchpanel {

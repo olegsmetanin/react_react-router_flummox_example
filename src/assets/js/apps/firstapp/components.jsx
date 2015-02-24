@@ -68,7 +68,12 @@ let AppHandler = React.createClass({
   render() {
     return (
       <div>
-      <div className="header">GitHub Search</div>
+      <a className="fork" href="https://github.com/olegsmith/react_react-router_flummox_example"><i className="fap fap-fork"></i></a>
+      
+
+      <div className="header">
+        GitHub Search: Isomorphic React + Babel (es7) + React-Router + Flummox 
+      </div>
 
       <RouteHandler />
       </div>
