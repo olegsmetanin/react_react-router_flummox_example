@@ -118,7 +118,7 @@ gulp.task('html', function() {
 });
 
 gulp.task('deploypages', function () {
-    return gulp.src('./dist/**/*')
+    return gulp.src('./dest/**/*')
         .pipe(deploypages());
 });
 
