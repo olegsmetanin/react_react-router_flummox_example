@@ -1,4 +1,18 @@
-# Simple example of es7 (babelify) + react + react-router + flummox + browserify isomorphic react
+# Simple example of isomorphic react
+
+Using:
+
+* es7 (babel)
+
+* react
+
+* react-router
+
+* flummox
+
+* browserify
+
+Steps:
 
 1. npm install
 
