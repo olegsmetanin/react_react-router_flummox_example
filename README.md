@@ -1,5 +1,7 @@
 # Simple example of isomorphic react
 
+[Demo page](http://olegsmith.github.io/react_react-router_flummox_example/#/search/javascript) 
+
 Using:
 
 * es7 (babel)
