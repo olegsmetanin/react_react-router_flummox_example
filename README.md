@@ -1,18 +1,18 @@
 # Simple example of isomorphic react
 
-[Demo page](http://olegsmith.github.io/react_react-router_flummox_example/#/search/javascript) 
+[Demo page http://olegsmith.github.io/react_react-router_flummox_example/#/search/javascript](http://olegsmith.github.io/react_react-router_flummox_example/#/search/javascript) 
 
 Using:
 
-* es7 (babel)
+* [es7 (babel)](https://babeljs.io/)
 
-* react
+* [react](http://facebook.github.io/react/)
 
-* react-router
+* [react-router](https://github.com/rackt/react-router)
 
-* flummox
+* [flummox](https://github.com/acdlite/flummox)
 
-* browserify
+* [browserify](http://browserify.org/)
 
 Steps:
 

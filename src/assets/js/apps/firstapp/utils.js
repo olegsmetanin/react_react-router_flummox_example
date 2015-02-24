@@ -14,6 +14,13 @@ Request.prototype.exec = function() {
   });
 };
 
+export async function performRouteHandlerStaticMethod(routes, methodName, ...args) {
+  return Promise.all(routes
+    .map(route => route.handler[methodName])
+    .filter(method => typeof method === 'function')
+    .map(method => method(...args))
+    );
+}
 
 export function debounce(func, wait, immediate) {
   var timeout;

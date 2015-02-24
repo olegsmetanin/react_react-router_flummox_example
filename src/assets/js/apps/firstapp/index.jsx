@@ -1,7 +1,8 @@
 'use strict';
 import React from 'react';
 import Router from 'react-router';
-import { routes, Flux, performRouteHandlerStaticMethod } from './components.jsx'
+import { routes, Flux } from './components.jsx'
+import { performRouteHandlerStaticMethod } from './utils.js'
 
 export default function(divid) {
 
