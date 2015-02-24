@@ -1,0 +1,30 @@
+$fap-version: "1";
+
+$app-font-name: "appfont" !default;
+$app-font-path: "../fonts";
+
+@font-face {
+  font-family: $app-font-name;
+  src: url('#{$app-font-path}/#{$app-font-name}.eot?v=#{$fap-version}');
+  src: url('#{$app-font-path}/#{$app-font-name}.eot?#iefix&v=#{$fap-version}') format('embedded-opentype'),
+  url('#{$app-font-path}/#{$app-font-name}.woff?v=#{$fap-version}') format('woff'),
+  url('#{$app-font-path}/#{$app-font-name}.ttf?v=#{$fap-version}') format('truetype'),
+  url('#{$app-font-path}/#{$app-font-name}.svg?v=#{$fap-version}#fontawesomeregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+.fap {
+  display: inline-block;
+  font-family: $app-font-name ! important;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.fap-star                         { &:before { content: "\e200"; } }
+.fap-watch                        { &:before { content: "\e201"; } }
+.fap-fork                         { &:before { content: "\e202"; } }

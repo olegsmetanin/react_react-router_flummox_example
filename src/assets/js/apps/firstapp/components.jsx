@@ -3,36 +3,29 @@ import React from 'react';
 import Router from 'react-router';
 import { Route, RouteHandler, DefaultRoute, HistoryLocation, State } from 'react-router'; 
 import { Flummox, Actions, Store } from 'flummox';
-import from './utils.js'
+import { debounce } from './utils.js'
 import request from 'superagent';
-//import data from './data.js';
 import from 'babel/polyfill';
 
-var delay = (time) => new Promise(resolve => setTimeout(resolve, time));
-
 // Actions
-  
+
 class AppActions extends Actions {
 
-  async getAllItems() { 
-    
-    let response = await request
-      .get(`https://api.github.com/search/repositories?q=git`)
+  async searchItems(query) { 
+    var items;
+    if (query === '') {
+      items = [];
+    } else {
+      let response = await request
+      .get(`https://api.github.com/search/repositories?q=${query}`)
       .query({
         per_page: 50,
       })
       .exec();
+      items = response.body.items;
 
-    return response.body.items;
-    // await delay(1000);
-    // return data.items;
-
-
-  }
-
-  async addNewItem(item) { 
-    await delay(1000);
-    return item;
+    }
+    return {query:query, items:items};
   }
 
 }
@@ -45,25 +38,25 @@ class AppStore extends Store {
     super();
 
     let appActionIds = flux.getActionIds('appActions');
-    this.register(appActionIds.getAllItems, this.handleGetAllItems);
-    this.register(appActionIds.addNewItem, this.handleAddNewItem);
+    this.register(appActionIds.searchItems, this.handleSearchItems);
 
     this.state = {
+      query:'',
       items:[]
     };
 
   }
 
-  handleGetAllItems(items) {
-    this.setState({items:items})
+  handleSearchItems(queryAndItems) {
+    this.setState(queryAndItems)
+  }
+  
+  getItems () {
+    return this.state.items;
   }
 
-  handleAddNewItem(item) {
-    this.setState({items:[...this.state.items, item]})
-  } 
-  
-  getAllItems () {
-    return this.state.items;
+  getQuery () {
+    return this.state.query;
   }
 
 }
@@ -75,7 +68,8 @@ let AppHandler = React.createClass({
   render() {
     return (
       <div>
-      Application
+      <div className="header">GitHub Search</div>
+
       <RouteHandler />
       </div>
       );
@@ -84,13 +78,20 @@ let AppHandler = React.createClass({
 
 // HomeHandler
 
-let HomeHandler = React.createClass({
+let SearchHandler = React.createClass({
   mixins: [State],
 
   statics: {
     async routerWillRun(state, flux) {
-      let appActions = flux.getActions('appActions');
-      return await appActions.getAllItems();
+
+    var query = 'javascript';
+    if (state.path.indexOf('/search/') === 0) {
+      query = state.path.substring(8);
+    }
+    
+
+    let appActions = flux.getActions('appActions');
+    return await appActions.searchItems(query);
     }
   },
 
@@ -100,59 +101,106 @@ let HomeHandler = React.createClass({
 
   getInitialState() {
     this.AppStore = this.context.flux.getStore('appStore');
-    return {items:this.AppStore.getAllItems()};
+    
+    return {
+      query:this.AppStore.getQuery(),
+      items:this.AppStore.getItems()
+    };
+  },
+
+  componentWillMount: function() {
+   this.handleSearchDebounced = debounce(function () {
+     this.handleSearch.apply(this, [this.state.query]);
+   }, 500);
   },
 
   componentDidMount() {
     this.AppStore.addListener('change', this.onAppStoreChange);
   },
-  
+
   componentWillUnmount() {
     this.AppStore.removeListener('change', this.onAppStoreChange);
   },
 
   onAppStoreChange () {
-    this.setState({items:this.AppStore.getAllItems()});
-  },
-
-  handleClick () {
-    //let appActions = this.context.flux.getActions('appActions');
-    //appActions.addNewItem({"time": new Date()});
+    this.setState({items:this.AppStore.getItems()});
   },
 
 
+  handleChange (event) {
+    let query = event.target.value;
+    this.setState({query: query});
+    this.handleSearchDebounced();
+
+  },
+
+  handleSearch (query) {
+    var url   = query ? '#/search/' + encodeURIComponent(query) : '#/search/';
+    history.replaceState({query:query}, "Search", url);
+    let appActions = this.context.flux.getActions('appActions');
+    appActions.searchItems(query);
+
+  },
 
   render() {
 
     let items = this.state.items;
+    let query = this.state.query;
 
     return (
       <div>
-      Repo List
-      <div>
-        {items.map(function(item) {
-          return <div key={item.id}>
-          <div>
-          <img src={item.owner.avatar_url}/>
+        <div className="searchpanel"> 
+          <div className="search">
+            <input type="text" value={query} onChange={this.handleChange} placeholder="Search in GitHub"/>
           </div>
-          <div>
-            {item.description}
-          </div>
-          </div>;
-        })}
+        </div>
+
+        {items.length === 0 ? 
+      
+          <div className="nodata">No data</div>
+          
+          :
+
+          <ul className="itemlist">
+          {items.map(function(item) {
+
+            var itemNameClass='item-name ' + (item.language ? item.language.toLowerCase().replace('#','sharp') : '');
+
+            return <li key={item.id}>
+
+              <div className="item-img">
+                <img src={item.owner.avatar_url}/>
+                <div className={itemNameClass}>
+                  <a href={item.html_url} target="_blank">{item.full_name} ({item.language})</a>
+                </div>
+                <div className="item-button-panel">
+                  <div className="counter"><i className="fap fap-star"></i>{item.stargazers_count}</div>
+                  <div className="counter"><i className="fap fap-watch"></i>{item.watchers_count}</div>
+                  <div className="counter"><i className="fap fap-fork"></i>{item.forks_count}</div>
+                </div>
+              </div>
+              
+              <div className="item-description">
+                {item.description}
+              </div>
+
+            </li>;
+          })}
+          </ul>
+
+        }  
+
       </div>
-      <button onClick={this.handleClick}>async update</button>
-      </div>
-      );
-  },
+    );
+  }
 });
 
 // routes
 
 export let routes = (
   <Route handler={AppHandler}>
-    <DefaultRoute handler={HomeHandler} />
-    <Route name="home" path="/" handler={HomeHandler}/>
+  <DefaultRoute handler={SearchHandler} />
+  <Route name="search" path="/search/?:query?" handler={SearchHandler}/>
   </Route>
   );
 

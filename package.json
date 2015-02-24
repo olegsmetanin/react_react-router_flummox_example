@@ -12,9 +12,6 @@
         "babelify": "latest",
         "exorcist": "latest",
         "vinyl-source-stream": "latest",
-        "through2": "latest",
-        "gulp-util": "latest",
-        "bufferstreams": "latest",
         "uglifyify": "latest",
 
         "express": "latest",
@@ -24,7 +21,12 @@
         "react-router": "latest",
         "flummox": "latest",
         "superagent": "latest",
-        "cheerio": "latest"
+        "cheerio": "latest",
+
+        "node-bourbon": "latest",
+        "gulp-sass": "latest",
+        "gulp-iconfont": "latest",
+        "gulp-sketch": "latest"
     },
     "engines": {
         "node": ">=0.10.0"

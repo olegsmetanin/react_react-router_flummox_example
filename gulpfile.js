@@ -5,9 +5,14 @@ var gulp = require('gulp'),
     babelify = require("babelify"),
     source = require('vinyl-source-stream'),
     exorcist = require('exorcist'),
-    uglifyify = require('uglifyify');
+    uglifyify = require('uglifyify'),
+    gulpsass = require('gulp-sass'),
+    sketch = require("gulp-sketch"),
+    iconfont = require('gulp-iconfont'),
+    bourbon = require('node-bourbon').includePaths;
 
-var dest = './dest';
+var dest = './dest',
+    fontName = 'appfont';
 
 gulp.task('apps', function() {
 
@@ -15,16 +20,18 @@ gulp.task('apps', function() {
             debug: true
         })
         .transform(babelify.configure({
-            experimental: true//,
-            //optional: ['asyncToGenerator']
+            experimental: true
         }))
         .require('./src/assets/js/apps/apps.js', {
             expose: 'apps'
         })
+        .external('babel/polyfill')
         .external('react')
         .external('react-router')
         .external('flummox')
+        .external('superagent')
         .external('cheerio')
+
 
     return bundler.bundle()
         .on('error', function(err) {
@@ -45,14 +52,20 @@ gulp.task('lib', function() {
         .transform({
             global: true
         }, 'uglifyify')
+        .require('./node_modules/babel/polyfill.js', {
+            expose: 'babel/polyfill'
+        })
         .require('./node_modules/react/dist/react.js', {
             expose: 'react'
         })
-        .require('./node_modules/react-router/modules/index.js', {
+        .require('./node_modules/react-router/lib/index.js', {
             expose: 'react-router'
         })
         .require('./node_modules/flummox/lib/Flux.js', {
             expose: 'flummox'
+        })
+        .require('./node_modules/superagent/lib/client.js', {
+            expose: 'superagent'
         })
         .require('./node_modules/cheerio/index.js', {
             expose: 'cheerio'
@@ -69,6 +82,35 @@ gulp.task('lib', function() {
 
 });
 
+gulp.task('styles', function() {
+    return gulp.src([
+            './src/assets/scss/app.scss'
+        ])
+        .pipe(gulpsass({
+            outputStyle: 'expanded',
+            includePaths: [
+                './src/assets/scss'
+            ].concat(bourbon),
+            errLogToConsole: true
+        }))
+        .pipe(gulp.dest(dest + '/assets/css'));
+});
+
+gulp.task('iconfont', function() {
+    return gulp.src('./src/assets/icons/symbol-font-16px.sketch') // you can also choose 'symbol-font-16px.sketch'
+        .pipe(sketch({
+            export: 'artboards',
+            formats: 'svg'
+        }))
+        .pipe(iconfont({
+            fontName: fontName,
+            appendCodepoints: true,
+            descent: 80
+        }))
+        .pipe(gulp.dest(dest + '/assets/fonts'))
+
+});
+
 gulp.task('html', function() {
     return gulp.src(['./src/**', '!./src/assets/**'])
         .pipe(gulp.dest(dest));
@@ -77,7 +119,9 @@ gulp.task('html', function() {
 gulp.task('watch', function() {
     gulp.watch('./src/assets/js/apps/**', ['apps']);
     gulp.watch('./src/assets/js/lib/**', ['lib']);
+    gulp.watch('./src/assets/scss/**', ['styles']);
+    gulp.watch('./src/assets/icons/**', ['iconfont']);
     gulp.watch(['./src/**', '!./src/assets/**'], ['html']);
 });
 
-gulp.task('default', ['apps', 'lib', 'html', 'watch']);
+gulp.task('default', ['apps', 'lib', 'styles', 'html', 'watch']);

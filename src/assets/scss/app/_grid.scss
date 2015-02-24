@@ -1,0 +1,13 @@
+$i: 20;
+
+@while $i > 0 {
+    $w: $i * $item-gutter-width;
+    $min: $w;
+    $max: $min + $item-gutter-width;
+    @media screen and (min-width: unquote($min + "px")) and (max-width: unquote($max + "px")) {
+        ul.itemlist {
+            width: unquote($w + "px");
+        }
+    }
+    $i: $i - 1;
+}
