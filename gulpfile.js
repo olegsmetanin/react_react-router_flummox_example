@@ -9,7 +9,8 @@ var gulp = require('gulp'),
     gulpsass = require('gulp-sass'),
     sketch = require("gulp-sketch"),
     iconfont = require('gulp-iconfont'),
-    bourbon = require('node-bourbon').includePaths;
+    bourbon = require('node-bourbon').includePaths,
+    deploypages = require('gulp-gh-pages');
 
 var dest = './dest',
     fontName = 'appfont';
@@ -114,6 +115,11 @@ gulp.task('iconfont', function() {
 gulp.task('html', function() {
     return gulp.src(['./src/**', '!./src/assets/**'])
         .pipe(gulp.dest(dest));
+});
+
+gulp.task('deploypages', function () {
+    return gulp.src('./dist/**/*')
+        .pipe(deploypages());
 });
 
 gulp.task('watch', function() {
