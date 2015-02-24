@@ -1,3 +1,2 @@
 /node_modules/
-/dest/
-/server/lib.js
+npm-debug.log
