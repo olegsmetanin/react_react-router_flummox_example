@@ -171,24 +171,23 @@ let SearchHandler = React.createClass({
 
           <ul className="itemlist">
           {items.map(function(item) {
-
-            var itemNameClass='item-name ' + (item.language ? item.language.toLowerCase().replace('#','sharp') : '');
+            let languageName = (item.language ? item.language.toLowerCase().replace('#','sharp') : '');
 
             return <li key={item.id}>
 
               <div className="item-img">
                 <img className="grow" src={item.owner.avatar_url}/>
-                <div className={itemNameClass}>
+                <div className={'item-name '+languageName}>
                   <a href={item.html_url} target="_blank">{item.full_name} ({item.language})</a>
                 </div>
                 <div className="item-button-panel">
-                  <div className="counter"><a href={item.html_url}><i className="fap fap-star"></i>{item.stargazers_count}</a></div>
-                  <div className="counter"><a href={item.html_url}><i className="fap fap-watch"></i>{item.watchers_count}</a></div>
-                  <div className="counter"><a href={item.html_url}><i className="fap fap-fork"></i>{item.forks_count}</a></div>
+                  <a className="counter" href={item.html_url} target="_blank"><i className="fap fap-star"></i>{item.stargazers_count}</a>
+                  <a className="counter" href={item.html_url} target="_blank"><i className="fap fap-watch"></i>{item.watchers_count}</a>
+                  <a className="counter" href={item.html_url} target="_blank"><i className="fap fap-fork"></i>{item.forks_count}</a>
                 </div>
               </div>
               
-              <div className="item-description">
+              <div className={'item-description ' + languageName}>
                 {item.description}
               </div>
 
