@@ -182,9 +182,9 @@ let SearchHandler = React.createClass({
                   <a href={item.html_url} target="_blank">{item.full_name} ({item.language})</a>
                 </div>
                 <div className="item-button-panel">
-                  <div className="counter"><i className="fap fap-star"></i>{item.stargazers_count}</div>
-                  <div className="counter"><i className="fap fap-watch"></i>{item.watchers_count}</div>
-                  <div className="counter"><i className="fap fap-fork"></i>{item.forks_count}</div>
+                  <div className="counter"><a href={item.html_url}><i className="fap fap-star"></i>{item.stargazers_count}</a></div>
+                  <div className="counter"><a href={item.html_url}><i className="fap fap-watch"></i>{item.watchers_count}</a></div>
+                  <div className="counter"><a href={item.html_url}><i className="fap fap-fork"></i>{item.forks_count}</a></div>
                 </div>
               </div>
               
