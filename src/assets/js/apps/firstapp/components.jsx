@@ -4,6 +4,7 @@ import React from 'react';
 import { Route, RouteHandler, DefaultRoute, State } from 'react-router'; 
 import { Flummox, Actions, Store } from 'flummox';
 import { debounce } from './utils.js';
+import DocumentTitle from 'react-document-title';
 import request from 'superagent';
 import 'babel/polyfill';
 
@@ -151,8 +152,10 @@ let SearchHandler = React.createClass({
 
     let items = this.state.items;
     let query = this.state.query;
-
+    let title = 'Search in GitHub: '+ query + ' //Isomorphic React Demo';
+   
     return (
+      <DocumentTitle title={title}>
       <div>
         <div className="searchpanel"> 
           <div className="search">
@@ -196,6 +199,7 @@ let SearchHandler = React.createClass({
         }  
 
       </div>
+      </DocumentTitle>
     );
   }
 });

@@ -17,7 +17,6 @@
         "exorcist": "latest",
         "vinyl-source-stream": "latest",
         "uglifyify": "latest",
-        "gulp-react": "latest",
         "gulp-jshint": "latest",
 
         "express": "latest",
