@@ -97,11 +97,12 @@ ul.itemlist {
         }
         .item-img {
             position: relative;
+            width: $item-width;
+            height: 270px;
             img {
                 margin: 0 auto;
                 display: block;
                 width: $item-width;
-                width: 270px;
                 height: auto;
             }
         }

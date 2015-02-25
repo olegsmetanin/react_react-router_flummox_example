@@ -176,7 +176,7 @@ let SearchHandler = React.createClass({
             return <li key={item.id}>
 
               <div className="item-img">
-                <img className="grow" src={item.owner.avatar_url}/>
+                <a href={item.html_url}><img className="grow" src={item.owner.avatar_url}/></a>
                 <a className={'item-name '+languageName} href={item.html_url} target="_blank">{item.full_name} ({item.language})</a>
                 <div className="item-button-panel">
                   <a className="counter" href={item.html_url} target="_blank"><i className="fap fap-star"></i>{item.stargazers_count}</a>
