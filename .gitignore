@@ -1,6 +1,7 @@
 .DS_Store
 /node_modules/
 npm-debug.log
+/tmp/
 /dest/*
 /dest/assets/fonts/*
 !/dest/assets/fonts/appfont.*

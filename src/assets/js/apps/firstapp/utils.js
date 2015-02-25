@@ -1,6 +1,6 @@
-/*
- * Superagent promisification
- */
+"use strict";
+/*jshint -W018, -W040, -W064, -W083, -W086 */
+
 import { Request } from 'superagent';
 
 Request.prototype.exec = function() {
@@ -35,6 +35,6 @@ export function debounce(func, wait, immediate) {
     timeout = setTimeout(later, wait);
     if (callNow) func.apply(context, args);
   };
-};
+}
 
 export var delay = (time) => new Promise(resolve => setTimeout(resolve, time));

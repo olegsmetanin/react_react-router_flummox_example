@@ -1,11 +1,11 @@
 'use strict';
+/*jshint -W018, -W040, -W064, -W083, -W086 */
 import React from 'react';
-import Router from 'react-router';
-import { Route, RouteHandler, DefaultRoute, HistoryLocation, State } from 'react-router'; 
+import { Route, RouteHandler, DefaultRoute, State } from 'react-router'; 
 import { Flummox, Actions, Store } from 'flummox';
-import { debounce } from './utils.js'
+import { debounce } from './utils.js';
 import request from 'superagent';
-import from 'babel/polyfill';
+import 'babel/polyfill';
 
 // Actions
 

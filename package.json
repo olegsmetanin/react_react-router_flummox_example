@@ -2,6 +2,10 @@
     "name": "react_react-router_flummox_browserify_example",
     "version": "0.0.1",
     "dependencies": {},
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/olegsmith/react_react-router_flummox_example.git"
+    },
     "scripts": {
         "server": "babel-node --experimental server/server.js"
     },
@@ -13,13 +17,16 @@
         "exorcist": "latest",
         "vinyl-source-stream": "latest",
         "uglifyify": "latest",
+        "gulp-react": "latest",
+        "gulp-jshint": "latest",
 
         "express": "latest",
         "body-parser": "latest",
 
-        "react": "latest",
-        "react-router": "latest",
-        "flummox": "latest",
+        "react": "~0.12.2",
+        "react-router": "~0.12.4",
+        "flummox": "~2.11.0",
+        "react-document-title": "~1.0.2",
         "superagent": "latest",
         "cheerio": "latest",
 

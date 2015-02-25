@@ -1,6 +1,6 @@
 # Simple example of isomorphic react
 
-[Demo page http://olegsmith.github.io/react_react-router_flummox_example/#/search/javascript](http://olegsmith.github.io/react_react-router_flummox_example/#/search/javascript) 
+[Demo page https://olegsmith.github.io/react_react-router_flummox_example/#/search/javascript](https://olegsmith.github.io/react_react-router_flummox_example/#/search/javascript) 
 
 Using:
 

@@ -1,11 +1,13 @@
 'use strict';
 
 var gulp = require('gulp'),
+    babel = require('gulp-babel'),
     browserify = require('browserify'),
     babelify = require("babelify"),
     source = require('vinyl-source-stream'),
     exorcist = require('exorcist'),
     uglifyify = require('uglifyify'),
+    jshint = require("gulp-jshint"),
     gulpsass = require('gulp-sass'),
     sketch = require("gulp-sketch"),
     iconfont = require('gulp-iconfont'),
@@ -117,7 +119,24 @@ gulp.task('html', function() {
         .pipe(gulp.dest(dest));
 });
 
-gulp.task('deploypages', function () {
+gulp.task("prelint", function() {
+    return gulp.src('./src/assets/js/apps/**')
+        .pipe(babel({
+            experimental: true
+        }))
+        .pipe(gulp.dest('./tmp/src'));
+});
+
+gulp.task('lint', ['prelint'], function() {
+    return gulp.src('./tmp/src/**')
+        .pipe(jshint())
+        .pipe(jshint.reporter("default", {
+            verbose: true
+        }))
+        .pipe(jshint.reporter("fail"));
+});
+
+gulp.task('deploypages', function() {
     return gulp.src('./dest/**/*')
         .pipe(deploypages());
 });
@@ -130,4 +149,4 @@ gulp.task('watch', function() {
     gulp.watch(['./src/**', '!./src/assets/**'], ['html']);
 });
 
-gulp.task('default', ['apps', 'lib', 'styles', 'html', 'watch']);
+gulp.task('default', ['apps', 'lib', 'lint', 'styles', 'html', 'watch']);
