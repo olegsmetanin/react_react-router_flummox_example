@@ -177,9 +177,7 @@ let SearchHandler = React.createClass({
 
               <div className="item-img">
                 <img className="grow" src={item.owner.avatar_url}/>
-                <div className={'item-name '+languageName}>
-                  <a href={item.html_url} target="_blank">{item.full_name} ({item.language})</a>
-                </div>
+                <a className={'item-name '+languageName} href={item.html_url} target="_blank">{item.full_name} ({item.language})</a>
                 <div className="item-button-panel">
                   <a className="counter" href={item.html_url} target="_blank"><i className="fap fap-star"></i>{item.stargazers_count}</a>
                   <a className="counter" href={item.html_url} target="_blank"><i className="fap fap-watch"></i>{item.watchers_count}</a>
@@ -187,7 +185,7 @@ let SearchHandler = React.createClass({
                 </div>
               </div>
               
-              <div className={'item-description ' + languageName}>
+              <div className={'item-description '+languageName}>
                 {item.description}
               </div>
 

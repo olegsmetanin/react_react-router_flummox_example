@@ -68,10 +68,31 @@ ul.itemlist {
             @include opacity(0.9);
             font-size: 20px;
             padding: 5px;
-            a {
-                text-decoration: none;
-                color: #fff;
-            }
+
+                &.c {
+                    background-color: #1976D2 !important;
+                }
+                &.javascript {
+                    background-color: #E64A19 !important;
+                }
+                &.java {
+                    background-color: #F44336 !important;
+                }
+                &.ruby {
+                    background-color: #E040FB !important;
+                }
+                &.python {
+                    background-color: #F57C00 !important;
+                }
+                &.php {
+                    background-color: #4CAF50 !important;
+                }
+                &.csharp {
+                    background-color: #795548 !important;
+                }
+                &.scala {
+                    background-color: #303F9F !important;
+                }
 
         }
         .item-img {
@@ -111,39 +132,42 @@ ul.itemlist {
         .item-description {
             padding-top: 20px;
             display: block;
-            background-color: #FF5722;
-            color: #fff;
+            //background-color: #FF5722;
+            //color: #fff;
+            background-color: #f0f0f0;
+            color: #374c52;
             height: 80px;
             overflow: hidden;
             padding-left: 5px;
             padding-right: 5px;
+
+                &.c {
+                    background-color: lighten(#1976D2, 20%) !important;
+                }
+                &.javascript {
+                    background-color: lighten(#E64A19, 20%) !important;
+                }
+                &.java {
+                    background-color: lighten(#F44336, 20%) !important;
+                }
+                &.ruby {
+                    background-color: lighten(#E040FB, 20%) !important;
+                }
+                &.python {
+                    background-color: lighten(#F57C00, 20%) !important;
+                }
+                &.php {
+                    background-color: lighten(#4CAF50, 20%) !important;
+                }
+                &.csharp {
+                    background-color: lighten(#795548, 20%) !important;
+                }
+                &.scala {
+                    background-color: lighten(#303F9F, 20%) !important;
+                }
+
         }
     }
-}
-
-.c {
-    background-color: #1976D2 !important;
-}
-.javascript {
-    background-color: #E64A19 !important;
-}
-.java {
-    background-color: #F44336 !important;
-}
-.ruby {
-    background-color: #E040FB !important;
-}
-.python {
-    background-color: #F57C00 !important;
-}
-.php {
-    background-color: #4CAF50 !important;
-}
-.csharp {
-    background-color: #795548 !important;
-}
-.scala {
-    background-color: #303F9F !important;
 }
 
 .grow { transition: all .2s ease-in-out; }
