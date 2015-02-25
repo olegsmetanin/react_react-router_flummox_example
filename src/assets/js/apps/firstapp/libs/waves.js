@@ -6,9 +6,8 @@
  * Released under the MIT license 
  * https://github.com/fians/Waves/blob/master/LICENSE 
  */
-
+/* global SVGElement */
 ;(function(window) {
-    'use strict';
 
     var Waves = Waves || {};
     var $$ = document.querySelectorAll.bind(document);

@@ -13,6 +13,7 @@
 		"it": true,
 		"beforeEach": true,
 		"afterEach": true,
+		"window": true,
 		"document": true,
 		"regeneratorRuntime":true,
 		"history":true
