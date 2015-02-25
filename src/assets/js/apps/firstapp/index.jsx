@@ -5,6 +5,9 @@ import React from 'react';
 import Router from 'react-router';
 import { routes, Flux } from './components.jsx'
 import { performRouteHandlerStaticMethod } from './utils.js'
+import './libs/waves.js';
+
+window.Waves.displayEffect();
 
 export default function(divid) {
 

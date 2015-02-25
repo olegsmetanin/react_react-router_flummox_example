@@ -176,12 +176,14 @@ let SearchHandler = React.createClass({
             return <li key={item.id}>
 
               <div className="item-img">
-                <a href={item.html_url}><img className="grow" src={item.owner.avatar_url}/></a>
+                <a className="waves-effect" href={item.html_url} target="_blank">
+                  <img className="grow" src={item.owner.avatar_url}/>
+                </a>
                 <a className={'item-name '+languageName} href={item.html_url} target="_blank">{item.full_name} ({item.language})</a>
                 <div className="item-button-panel">
-                  <a className="counter" href={item.html_url} target="_blank"><i className="fap fap-star"></i>{item.stargazers_count}</a>
-                  <a className="counter" href={item.html_url} target="_blank"><i className="fap fap-watch"></i>{item.watchers_count}</a>
-                  <a className="counter" href={item.html_url} target="_blank"><i className="fap fap-fork"></i>{item.forks_count}</a>
+                  <a className="waves-effect counter" href={item.html_url} target="_blank"><i className="fap fap-star"></i>{item.stargazers_count}</a>
+                  <a className="waves-effect counter" href={item.html_url} target="_blank"><i className="fap fap-watch"></i>{item.watchers_count}</a>
+                  <a className="waves-effect counter" href={item.html_url} target="_blank"><i className="fap fap-fork"></i>{item.forks_count}</a>
                 </div>
               </div>
               
