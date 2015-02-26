@@ -35,6 +35,7 @@ gulp.task('apps', function() {
         .external('jquery')
         .external('superagent')
         .external('cheerio')
+        .external('fastclick')
 
 
     return bundler.bundle()
@@ -76,6 +77,9 @@ gulp.task('lib', function() {
         })
         .require('./node_modules/cheerio/index.js', {
             expose: 'cheerio'
+        })
+        .require('./node_modules/fastclick/lib/fastclick.js', {
+            expose: 'fastclick'
         });
 
     return bundler.bundle()

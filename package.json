@@ -29,6 +29,7 @@
         "superagent": "latest",
         "cheerio": "latest",
         "jquery": "latest",
+        "fastclick": "latest",
 
         "node-bourbon": "latest",
         "gulp-sass": "latest",

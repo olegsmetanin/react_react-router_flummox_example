@@ -6,8 +6,10 @@ import Router from 'react-router';
 import { routes, Flux } from './components.jsx'
 import { performRouteHandlerStaticMethod } from './utils.js'
 import './libs/waves.js';
+import attachFastClick from 'fastclick';
 
 window.Waves.displayEffect();
+attachFastClick(document.body);
 
 export default function(divid) {
 
