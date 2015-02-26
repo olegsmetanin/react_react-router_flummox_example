@@ -32,6 +32,7 @@ gulp.task('apps', function() {
         .external('react')
         .external('react-router')
         .external('flummox')
+        .external('jquery')
         .external('superagent')
         .external('cheerio')
 
@@ -67,6 +68,9 @@ gulp.task('lib', function() {
         .require('./node_modules/flummox/lib/Flux.js', {
             expose: 'flummox'
         })
+        .require('./node_modules/jquery/dist/jquery.js', {
+            expose: 'jquery'
+        })     
         .require('./node_modules/superagent/lib/client.js', {
             expose: 'superagent'
         })
@@ -119,6 +123,11 @@ gulp.task('html', function() {
         .pipe(gulp.dest(dest));
 });
 
+gulp.task('img', function() {
+    return gulp.src(['./src/assets/img/**'])
+        .pipe(gulp.dest(dest+ '/assets/img'));
+});
+
 gulp.task("prelint", function() {
     return gulp.src('./src/assets/js/apps/**')
         .pipe(babel({
@@ -149,4 +158,4 @@ gulp.task('watch', function() {
     gulp.watch(['./src/**', '!./src/assets/**'], ['html']);
 });
 
-gulp.task('default', ['apps', 'lib', 'lint', 'styles', 'html', 'watch']);
+gulp.task('default', ['apps', 'lib', 'lint', 'styles', 'html', /* 'img', */ 'watch']);

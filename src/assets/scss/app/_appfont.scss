@@ -25,6 +25,7 @@ $app-font-path: "../fonts";
   -moz-osx-font-smoothing: grayscale;
 }
 
+.fap-react                        { &:before { content: "\e199"; } }
 .fap-star                         { &:before { content: "\e200"; } }
 .fap-watch                        { &:before { content: "\e201"; } }
 .fap-fork                         { &:before { content: "\e202"; } }

@@ -5,6 +5,7 @@ import { Route, RouteHandler, DefaultRoute, State } from 'react-router';
 import { Flummox, Actions, Store } from 'flummox';
 import { debounce } from './utils.js';
 import DocumentTitle from 'react-document-title';
+import StickyMenu from './stickymenu.jsx';
 import request from 'superagent';
 import 'babel/polyfill';
 
@@ -69,12 +70,8 @@ let AppHandler = React.createClass({
   render() {
     return (
       <div>
+      <i className="react fap fap-react"></i>
       <a className="fork" href="https://github.com/olegsmith/react_react-router_flummox_example"><i className="fap fap-fork"></i></a>
-      
-
-      <div className="header">
-        GitHub Search: Isomorphic React + Babel (es7) + React-Router + Flummox 
-      </div>
 
       <RouteHandler />
       </div>
@@ -82,7 +79,8 @@ let AppHandler = React.createClass({
   },
 });
 
-// HomeHandler
+
+// SearchHandler
 
 let SearchHandler = React.createClass({
   mixins: [State],
@@ -157,12 +155,22 @@ let SearchHandler = React.createClass({
     return (
       <DocumentTitle title={title}>
       <div>
-        <div className="searchpanel"> 
-          <div className="search">
-            <input type="text" value={query} onChange={this.handleChange} placeholder="Search in GitHub"/>
+        <div className="header">
+          <div className="header-title">
+            GitHub Search: Isomorphic React + Babel (es7) + React-Router + Flummox 
           </div>
-        </div>
 
+            <div>
+              <StickyMenu className="searchpanel">
+                <div className="searchwrap">
+                  <div className="search">
+                    <input type="text" value={query} onChange={this.handleChange} autoFocus placeholder="Search in GitHub"/>
+                  </div>
+                </div>
+              </StickyMenu>
+            </div>
+
+        </div>          
         {items.length === 0 ? 
       
           <div className="nodata">No data</div>
