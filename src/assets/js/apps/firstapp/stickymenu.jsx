@@ -34,7 +34,7 @@ let StickyMenu = React.createClass({
             if (window.scrollY >= this._top) {
                this.getDOMNode().classList.add('sticky') 
            } else {
-                this.getDOMNode().classList.remove('sticky');
+            this.getDOMNode().classList.remove('sticky');
            }
         },
 
