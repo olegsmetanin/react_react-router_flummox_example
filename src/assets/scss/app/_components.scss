@@ -55,9 +55,10 @@ div.styckyplaceholder {
 }
 
 div.searchpanel {
+    min-height: 50px;
     margin: 0;
     width: 100%;
-    padding-bottom: 10px;
+    padding-bottom: 6px;
     background-color: #DB5600;
     display: block;
     &.sticky {
@@ -74,13 +75,16 @@ div.searchpanel {
                 text-align: center;
                 width: 99%;
                 display: block;
-                padding: 10px 0;
                 color: #fff;
                 outline: 0;
                 border: none;
-                font-size: 20px;
+                font-size: 30px;
                 border: 0;
                 border-bottom: 1px solid #fff;
+                padding: 4px;
+                &:focus {
+                    background: rgba(255, 255, 255, 0.2);
+                }
             }
         }
     }
@@ -92,6 +96,9 @@ div.nodata {
 }
 
 ul.itemlist {
+    -webkit-transform: translateZ(0px);
+    -webkit-transform: translate3d(0, 0, 0);
+    -webkit-perspective: 1000;
     margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
@@ -227,5 +234,4 @@ ul.itemlist {
     top: 0;
     left: 0;
     z-index: 9998;
-    -webkit-transform: translateZ(0);
 }

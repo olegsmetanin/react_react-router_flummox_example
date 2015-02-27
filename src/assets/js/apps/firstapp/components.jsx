@@ -146,6 +146,9 @@ let SearchHandler = React.createClass({
 
   },
 
+  handleFocus (e) {
+  },
+
   render() {
 
     let items = this.state.items;
@@ -164,7 +167,7 @@ let SearchHandler = React.createClass({
               <StickyMenu className="searchpanel">
                 <div className="searchwrap">
                   <div className="search">
-                    <input type="text" value={query} onChange={this.handleChange} autoFocus placeholder="Search in GitHub"/>
+                    <input type="text" value={query} onChange={this.handleChange} onFocus={this.handleFocus} placeholder="Search in GitHub"/>
                   </div>
                 </div>
               </StickyMenu>
