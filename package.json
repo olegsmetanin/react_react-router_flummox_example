@@ -31,6 +31,7 @@
         "jquery": "latest",
         "fastclick": "latest",
 
+        "gulp-babel": "^4.0.0",
         "node-bourbon": "latest",
         "gulp-sass": "latest",
         "gulp-iconfont": "latest",
