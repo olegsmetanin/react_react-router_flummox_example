@@ -157,7 +157,7 @@ let SearchHandler = React.createClass({
       <div>
         <div className="header">
           <div className="header-title">
-            GitHub Search: Isomorphic React + Babel (es7) + React-Router + Flummox
+            GitHub Search: Isomorphic React + Babel (es7) + React-Router + Alt
           </div>
 
             <div>
