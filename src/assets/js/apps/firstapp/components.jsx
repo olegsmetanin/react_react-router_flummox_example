@@ -1,8 +1,8 @@
 'use strict';
 /*jshint -W018, -W040, -W064, -W083, -W086 */
 import React from 'react';
-import { Route, RouteHandler, DefaultRoute, State } from 'react-router'; 
-import { Flummox, Actions, Store } from 'flummox';
+import { Route, RouteHandler, DefaultRoute, State } from 'react-router';
+import Alt from 'alt';
 import { debounce } from './utils.js';
 import DocumentTitle from 'react-document-title';
 import StickyMenu from './stickymenu.jsx';
@@ -11,9 +11,9 @@ import 'babel/polyfill';
 
 // Actions
 
-class AppActions extends Actions {
+class AppActions {
 
-  async searchItems(query) { 
+  async searchItems(query) {
     var items;
     if (query === '') {
       items = [];
@@ -27,38 +27,35 @@ class AppActions extends Actions {
       items = response.body.items;
 
     }
-    return {query:query, items:items};
+
+    this.dispatch({query:query, items:items});
   }
 
 }
 
 // Store
 
-class AppStore extends Store { 
+class AppStore {
 
-  constructor(flux) {
-    super();
+  constructor() {
+    let appActionIds = this.alt.getActions('appActions');
+    this.bindAction(appActionIds.searchItems, this.handleSearchItems);
 
-    let appActionIds = flux.getActionIds('appActions');
-    this.register(appActionIds.searchItems, this.handleSearchItems);
-
-    this.state = {
-      query:'',
-      items:[]
-    };
-
+    this.query = '';
+    this.items = [];
   }
 
   handleSearchItems(queryAndItems) {
-    this.setState(queryAndItems)
-  }
-  
-  getItems () {
-    return this.state.items;
+    this.query = queryAndItems.query;
+    this.items = queryAndItems.items;
   }
 
-  getQuery () {
-    return this.state.query;
+  static getItems() {
+    return this.getState().items;
+  }
+
+  static getQuery() {
+    return this.getState().query;
   }
 
 }
@@ -92,7 +89,7 @@ let SearchHandler = React.createClass({
     if (state.path.indexOf('/search/') === 0) {
       query = state.path.substring(8);
     }
-    
+
 
     let appActions = flux.getActions('appActions');
     return await appActions.searchItems(query);
@@ -105,7 +102,7 @@ let SearchHandler = React.createClass({
 
   getInitialState() {
     this.AppStore = this.context.flux.getStore('appStore');
-    
+
     return {
       query:this.AppStore.getQuery(),
       items:this.AppStore.getItems()
@@ -119,11 +116,11 @@ let SearchHandler = React.createClass({
   },
 
   componentDidMount() {
-    this.AppStore.addListener('change', this.onAppStoreChange);
+    this.AppStore.listen(this.onAppStoreChange);
   },
 
   componentWillUnmount() {
-    this.AppStore.removeListener('change', this.onAppStoreChange);
+    this.AppStore.unlisten(this.onAppStoreChange);
   },
 
   onAppStoreChange () {
@@ -154,13 +151,13 @@ let SearchHandler = React.createClass({
     let items = this.state.items;
     let query = this.state.query;
     let title = 'Search in GitHub: '+ query + ' //Isomorphic React Demo';
-   
+
     return (
       <DocumentTitle title={title}>
       <div>
         <div className="header">
           <div className="header-title">
-            GitHub Search: Isomorphic React + Babel (es7) + React-Router + Flummox 
+            GitHub Search: Isomorphic React + Babel (es7) + React-Router + Alt
           </div>
 
             <div>
@@ -173,11 +170,11 @@ let SearchHandler = React.createClass({
               </StickyMenu>
             </div>
 
-        </div>          
-        {items.length === 0 ? 
-      
+        </div>
+        {items.length === 0 ?
+
           <div className="nodata">No data</div>
-          
+
           :
 
           <ul className="itemlist">
@@ -197,7 +194,7 @@ let SearchHandler = React.createClass({
                   <a className="waves-effect counter" href={item.html_url} target="_blank"><i className="fap fap-fork"></i>{item.forks_count}</a>
                 </div>
               </div>
-              
+
               <div className={'item-description '+languageName}>
                 {item.description}
               </div>
@@ -206,7 +203,7 @@ let SearchHandler = React.createClass({
           })}
           </ul>
 
-        }  
+        }
 
       </div>
       </DocumentTitle>
@@ -226,12 +223,12 @@ export let routes = (
 
 // Flux
 
-export class Flux extends Flummox {
+export class Flux extends Alt {
   constructor() {
     super();
 
-    this.createActions('appActions', AppActions);
-    this.createStore('appStore', AppStore, this);
+    this.addActions('appActions', AppActions);
+    this.addStore('appStore', AppStore);
   }
 }
 
