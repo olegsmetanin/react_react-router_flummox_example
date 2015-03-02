@@ -2,16 +2,17 @@
     "name": "react_react-router_flummox_browserify_example",
     "version": "0.0.1",
     "dependencies": {
-        "express": "latest",
         "body-parser": "latest",
-        "react": "~0.12.2",
-        "react-router": "~0.12.4",
-        "flummox": "~2.11.0",
-        "react-document-title": "~1.0.2",
-        "superagent": "latest",
         "cheerio": "latest",
+        "express": "latest",
+        "fastclick": "latest",
+        "flummox": "~2.11.0",
         "jquery": "latest",
-        "fastclick": "latest"
+        "js-base64": "latest",
+        "react": "~0.12.2",
+        "react-document-title": "~1.0.2",
+        "react-router": "~0.12.4",
+        "superagent": "latest"
     },
     "repository": {
         "type": "git",
@@ -21,20 +22,20 @@
         "server": "babel-node --experimental server/server.js"
     },
     "devDependencies": {
-        "gulp": "latest",
-        "browserify": "latest",
         "babel": "latest",
         "babelify": "latest",
+        "browserify": "latest",
         "exorcist": "latest",
-        "vinyl-source-stream": "latest",
-        "uglifyify": "latest",
-        "gulp-jshint": "latest",
+        "gulp": "latest",
         "gulp-babel": "^4.0.0",
-        "node-bourbon": "latest",
-        "gulp-sass": "latest",
+        "gulp-gh-pages": "latest",
         "gulp-iconfont": "latest",
+        "gulp-jshint": "latest",
+        "gulp-sass": "latest",
         "gulp-sketch": "latest",
-        "gulp-gh-pages": "latest"
+        "node-bourbon": "latest",
+        "uglifyify": "latest",
+        "vinyl-source-stream": "latest"
     },
     "engines": {
         "node": ">=0.10.0"

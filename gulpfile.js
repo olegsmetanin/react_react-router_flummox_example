@@ -36,6 +36,7 @@ gulp.task('apps', function() {
         .external('superagent')
         .external('cheerio')
         .external('fastclick')
+        .external('js-base64')
 
 
     return bundler.bundle()
@@ -80,6 +81,9 @@ gulp.task('lib', function() {
         })
         .require('./node_modules/fastclick/lib/fastclick.js', {
             expose: 'fastclick'
+        })
+        .require('./node_modules/js-base64/base64.js', {
+            expose: 'js-base64'
         });
 
     return bundler.bundle()

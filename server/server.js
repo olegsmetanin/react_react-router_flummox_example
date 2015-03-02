@@ -6,8 +6,8 @@ var app = express();
 
 var firstapp = require('./../src/assets/js/apps/firstapp/server.jsx');
 
-app.get('/', firstapp);
+app.use('/assets', express.static('./dest/assets'));
 
-app.use(express.static('./dest'));
+app.use(firstapp);
 
 app.listen(8080);

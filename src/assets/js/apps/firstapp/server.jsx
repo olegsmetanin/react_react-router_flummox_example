@@ -33,15 +33,15 @@ export default function (req, res) {
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
                 <title>${ title }</title>
-                <link href="assets/css/app.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+                <link href="/assets/css/app.css" type="text/css" rel="stylesheet" media="screen,projection"/>
               </head>
               <body>
                 <div id="app">
                 ${ content }
                 </div>
                 <!--  Scripts-->
-                <script type="text/javascript" src="assets/js/lib.js"></script>
-                <script type="text/javascript" src="assets/js/apps.js"></script>
+                <script type="text/javascript" src="/assets/js/lib.js"></script>
+                <script type="text/javascript" src="/assets/js/apps.js"></script>
                 <script>
                 require('apps').firstapp('app');
                 </script>
