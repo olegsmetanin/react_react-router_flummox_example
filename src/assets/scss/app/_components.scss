@@ -235,3 +235,26 @@ ul.itemlist {
     left: 0;
     z-index: 9998;
 }
+
+.nodata {
+    margin-top:20px;
+    color: #DB5600;
+    font-size:50px;
+}
+
+.readme {
+    width:80%;
+    margin-left:10%;
+    h1 {
+        color: #DB5600;
+        font-size:50px;
+
+    }
+}
+
+.itemlistheader {
+    width:80%;
+    margin-left:10%; 
+    color: #DB5600;
+    font-size:50px;
+}

@@ -5,7 +5,7 @@ import React from 'react';
 import Router from 'react-router';
 import { routes, Flux } from './components.jsx'
 import DocumentTitle from 'react-document-title';
-import { performRouteHandlerStaticMethod } from './utils.js'
+import { performRouteHandlerStaticMethod } from './utils/Utils.js'
 
 export default function (req, res) {
 
@@ -15,7 +15,7 @@ export default function (req, res) {
     
     async function run() {
 
-      await performRouteHandlerStaticMethod(state.routes, 'routerWillRun', state, flux);
+      await performRouteHandlerStaticMethod(state.routes, 'routerWillRunOnServer', state, flux);
 
       React.withContext(
         { flux },

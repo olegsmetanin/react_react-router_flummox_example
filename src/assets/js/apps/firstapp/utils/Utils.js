@@ -1,19 +1,6 @@
 "use strict";
 /*jshint -W018, -W040, -W064, -W083, -W086 */
 
-import { Request } from 'superagent';
-
-Request.prototype.exec = function() {
-  let req = this;
-
-  return new Promise ((resolve, reject) => {
-    req.end((error, res) => {
-      if (error) return reject(error);
-      resolve(res);
-    });
-  });
-};
-
 export async function performRouteHandlerStaticMethod(routes, methodName, ...args) {
   return Promise.all(routes
     .map(route => route.handler[methodName])
