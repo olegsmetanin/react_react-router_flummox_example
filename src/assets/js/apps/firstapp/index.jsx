@@ -22,7 +22,7 @@ export default function(divid) {
 
     async function run() {
 
-      await performRouteHandlerStaticMethod(state.routes, 'routerWillRun', state, flux);
+      await performRouteHandlerStaticMethod(state.routes, 'routerWillRunOnClient', state, flux);
 
       React.withContext(
         { flux },
