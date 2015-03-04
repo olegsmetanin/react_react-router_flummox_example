@@ -9,25 +9,22 @@ class AppActions extends Actions {
     var items;
     
     if (query === '') {
-      items = [];
+      return {query:query, items:items};
     } else {  
-      let response = await httpRequest
+      return await httpRequest
       .get(`https://api.github.com/search/repositories?q=${query}&sort=stars&order=desc`)
       .query({
         per_page: 50,
       })
-      .exec();
-      items = response.body.items;
-
+      .exec().then((val) => ({query:query, items:val.body.items}));
     }
-    return {query:query, items:items};
   }
 
   async getItemDetails(ownerName, repoName) {
 
       let details = httpRequest
       .get(`https://api.github.com/repos/${ownerName}/${repoName}`)
-      .exec(); 
+      .exec().then((resp) => resp.body); 
 
       var readme;
       if (typeof(window) === 'undefined') {
@@ -35,39 +32,33 @@ class AppActions extends Actions {
           .get(`https://api.github.com/repos/${ownerName}/${repoName}/readme`)    
           .set('Accept', 'application/vnd.github.V3.html')
           .parse(httpRequest.parse['text']) //!!! server only
-          .exec();
+          .exec().then((resp) => resp.res.text);
       } else {
         readme = httpRequest
           .get(`https://api.github.com/repos/${ownerName}/${repoName}/readme`)    
           .set('Accept', 'application/vnd.github.V3.html')
-          .exec(); 
+          .exec().then((resp) => resp.text); 
       }
 
       let releases = httpRequest
       .get(`https://api.github.com/repos/${ownerName}/${repoName}/releases`)
-      .exec();
+      .exec().then((resp) => resp.body);
 
       let stat = httpRequest
       .get(`https://api.github.com/repos/${ownerName}/${repoName}/stats/commit_activity`)
-      .exec();
+      .exec().then((resp) => resp.body)
 
       let similarItems = httpRequest
       .get(`https://api.github.com/search/repositories?q=${repoName}&sort=stars&order=desc`)
       .query({
         per_page: 50,
       })
-      .exec();
+      .exec().then((resp) => resp.body.items)
 
-      let combo = await Promise.all([details, readme, releases, stat, similarItems]);
-
-      var readmeClientResponse;
-      if ((typeof(window) === 'undefined')) {
-        readmeClientResponse = combo[1].res.text;
-      } else {
-        readmeClientResponse = combo[1].text;
-      }
-
-      return {repoFullName: ownerName+'/'+repoName, details:combo[0].body, readme:readmeClientResponse, releases:combo[2].body, stat: combo[3].body, similarItems:combo[4].body.items};
+      return Promise.all([details, readme, releases, stat, similarItems])
+        .then( (val) => ({repoFullName: ownerName+'/'+repoName, details:val[0], readme:val[1], releases:val[2], stat:val[3], similarItems:val[4]}),
+          (error) => ({repoFullName: ownerName+'/'+repoName, error:error})
+      );
   }
 
 }

@@ -24,7 +24,7 @@ a.fork {
 div.header {
     display: block;
     text-align: center;
-    width: auto;
+    width: 100%;
     font-size: 30px;
     font-weight: 500;
     color: #fff;
@@ -237,24 +237,59 @@ ul.itemlist {
 }
 
 .nodata {
-    margin-top:20px;
+    margin-top: 20px;
     color: #DB5600;
-    font-size:50px;
+    font-size: 50px;
 }
 
 .readme {
-    width:80%;
-    margin-left:10%;
+    width: 80%;
+    margin-left: 10%;
     h1 {
         color: #DB5600;
-        font-size:50px;
-
+        font-size: 50px;
     }
 }
 
 .itemlistheader {
-    width:80%;
-    margin-left:10%; 
+    width: 80%;
+    margin-left: 10%;
     color: #DB5600;
-    font-size:50px;
+    font-size: 50px;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.x.axis path {
+    display: none;
+}
+
+.line {
+    fill: none;
+    stroke: #DB5600;
+    stroke-width: 1.5px;
+}
+
+.repoheader {
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 20px;
+    .avatar {
+        float: left;
+        width: 270px;
+        height: 270px;
+        img {
+            width: 270px;
+            height: 270px;
+        }
+    }
+    .chartwrap {
+        overflow: hidden;
+        height: 270px;
+    }
 }

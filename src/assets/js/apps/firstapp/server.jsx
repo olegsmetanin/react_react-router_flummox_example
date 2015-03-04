@@ -3,9 +3,13 @@
 
 import React from 'react';
 import Router from 'react-router';
-import { routes, Flux } from './components.jsx'
+import Flux from './Flux.js';
+import routes from './routes.js';
+import { performRouteHandlerStaticMethod } from './utils/Utils.js';
+import './utils/FlatMap.js'; 
+import 'babel/polyfill';
+
 import DocumentTitle from 'react-document-title';
-import { performRouteHandlerStaticMethod } from './utils/Utils.js'
 
 export default function (req, res) {
 

@@ -6,9 +6,10 @@ import Router from 'react-router';
 import Flux from './Flux.js';
 import routes from './routes.js';
 import { performRouteHandlerStaticMethod } from './utils/Utils.js';
+import 'babel/polyfill';
+
 import './libs/waves.js';
 import attachFastClick from 'fastclick';
-import 'babel/polyfill';
 
 window.Waves.displayEffect();
 attachFastClick(document.body);

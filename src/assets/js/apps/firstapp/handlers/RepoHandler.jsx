@@ -4,6 +4,8 @@ import { Flummox, Actions, Store } from 'flummox';
 import ItemList from './../components/ItemList.jsx';
 import DocumentTitle from 'react-document-title';
 import StickyMenu from './../components/StickyMenu.jsx';
+import AreaChart from './../components/AreaChart.jsx';
+import './../utils/FlatMap.js'; 
 
 let RepoHandler = React.createClass({
   mixins: [State],
@@ -57,13 +59,14 @@ let RepoHandler = React.createClass({
     if (this.state.store_miss) {
       jsx = <DocumentTitle title={title}>
         <div>
-          <div className="header">
-            <div className="header-title">
-              {title} 
-            </div>
+          <div>
+            <StickyMenu className="header">
+              <div className="header-title">
+                {title}
+              </div>
 
-          </div>          
-
+            </StickyMenu>        
+          </div>
           <div className="spinner">
             <div className="rect1 dark"></div>
             <div className="rect2 dark"></div>
@@ -75,19 +78,37 @@ let RepoHandler = React.createClass({
         </div>
       </DocumentTitle>
     } else {
+      let details = this.state.details;
+      var data;
+
+      if (Array.isArray(this.state.stat)) {
+        data =this.state.stat.flatMap( ({days, total, week}) => days.map( (d,i) => [(week+i*60*60*24)*1000,d]));
+      } else {
+        data = [];
+      }
 
       let similarItems = this.state.similarItems;
       let readmeContent = this.state.readme;
+      let avatar_url = (details.owner && details.owner.avatar_url) ? details.owner.avatar_url : 'https://cdn2.iconfinder.com/data/icons/metro-ui-dock/512/User_No-Frame.png';
 
       jsx = <DocumentTitle title={title}>
       <div>
-        <div className="header">
-          <div className="header-title">
-            {title} 
+          <div>
+            <StickyMenu className="header">
+              <div className="header-title">
+                {title}
+              </div>
+
+            </StickyMenu>        
+          </div>          
+        <div className="repoheader">
+          <div className="avatar">
+            <img className="grow" src={avatar_url}/>
           </div>
-
-        </div>          
-
+          <div className="chartwrap">
+              <AreaChart data={data}/>
+          </div>
+        </div>
         <div className="readme">
           <div dangerouslySetInnerHTML={{__html: readmeContent}} />
         </div>
