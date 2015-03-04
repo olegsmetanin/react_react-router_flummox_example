@@ -36,7 +36,8 @@ gulp.task('apps', function() {
         .external('superagent')
         .external('cheerio')
         .external('fastclick')
-        .external('js-base64')
+        .external('d3')
+        .external('lru-cache');
 
 
     return bundler.bundle()
@@ -82,8 +83,11 @@ gulp.task('lib', function() {
         .require('./node_modules/fastclick/lib/fastclick.js', {
             expose: 'fastclick'
         })
-        .require('./node_modules/js-base64/base64.js', {
-            expose: 'js-base64'
+        .require('./node_modules/d3/index.js', {
+            expose: 'd3'
+        })
+        .require('./node_modules/lru-cache/lib/lru-cache.js', {
+            expose: 'lru-cache'
         });
 
     return bundler.bundle()

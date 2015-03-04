@@ -4,11 +4,11 @@
   "dependencies": {
     "body-parser": "latest",
     "cheerio": "latest",
+    "d3": "latest",
     "express": "latest",
     "fastclick": "latest",
     "flummox": "~2.11.0",
     "jquery": "latest",
-    "js-base64": "latest",
     "lru-cache": "^2.5.0",
     "react": "~0.12.2",
     "react-document-title": "~1.0.2",
