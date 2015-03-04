@@ -423,7 +423,7 @@ a.fork {
 div.header {
   display: block;
   text-align: center;
-  width: auto;
+  width: 100%;
   font-size: 30px;
   font-weight: 500;
   color: #fff;
@@ -624,6 +624,34 @@ ul.itemlist {
   margin-left: 10%;
   color: #DB5600;
   font-size: 50px; }
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges; }
+
+.x.axis path {
+  display: none; }
+
+.line {
+  fill: none;
+  stroke: #DB5600;
+  stroke-width: 1.5px; }
+
+.repoheader {
+  width: 80%;
+  margin-left: 10%;
+  margin-top: 20px; }
+  .repoheader .avatar {
+    float: left;
+    width: 270px;
+    height: 270px; }
+    .repoheader .avatar img {
+      width: 270px;
+      height: 270px; }
+  .repoheader .chartwrap {
+    overflow: hidden;
+    height: 270px; }
 
 @media screen and (min-width: 5600px) and (max-width: 5880px) {
   ul.itemlist {
