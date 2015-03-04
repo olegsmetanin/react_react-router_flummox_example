@@ -13,12 +13,12 @@ let SearchHandler = React.createClass({
   statics: {
 
   async routerWillRunOnServer(state, flux) {
-
     var query = 'javascript';
     if (state.path.indexOf('/search/') === 0) {
       query = state.path.substring(8);
     }
-    
+
+    state.params = {query:query};
     let appActions = flux.getActions('appActions');
     return await appActions.searchItems(query);
     }
