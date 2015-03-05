@@ -319,6 +319,8 @@ var Store = _flummox.Store;
 
 var httpRequest = _interopRequire(require("./../services/HttpRequest.js"));
 
+var retryWhile = require("./../utils/Promise.js").retryWhile;
+
 var AppActions = (function (Actions) {
   function AppActions() {
     _classCallCheck(this, AppActions);
@@ -365,7 +367,7 @@ var AppActions = (function (Actions) {
     },
     getItemDetails: {
       value: function getItemDetails(ownerName, repoName) {
-        var details, readme, releases, stat, similarItems;
+        var details, readme, releases, statRequest, stat, similarItems;
         return regeneratorRuntime.async(function getItemDetails$(context$2$0) {
           while (1) switch (context$2$0.prev = context$2$0.next) {
             case 0:
@@ -387,7 +389,16 @@ var AppActions = (function (Actions) {
               releases = httpRequest.get("https://api.github.com/repos/" + ownerName + "/" + repoName + "/releases").exec().then(function (resp) {
                 return resp.body;
               });
-              stat = httpRequest.get("https://api.github.com/repos/" + ownerName + "/" + repoName + "/stats/commit_activity").exec().then(function (resp) {
+
+              statRequest = function () {
+                return httpRequest.get("https://api.github.com/repos/" + ownerName + "/" + repoName + "/stats/commit_activity").exec();
+              };
+
+              stat = retryWhile(statRequest, function (resp, counter) {
+                return resp.status == 202 && counter < 3;
+              }, function (counter) {
+                return counter * 500;
+              }).then(function (resp) {
                 return resp.body;
               });
               similarItems = httpRequest.get("https://api.github.com/search/repositories?q=" + repoName + "&sort=stars&order=desc").query({
@@ -400,7 +411,7 @@ var AppActions = (function (Actions) {
                 return { repoFullName: ownerName + "/" + repoName, error: error };
               }));
 
-            case 6:
+            case 7:
             case "end":
               return context$2$0.stop();
           }
@@ -416,7 +427,7 @@ var AppActions = (function (Actions) {
 
 module.exports = AppActions;
 
-},{"./../services/HttpRequest.js":17,"flummox":"flummox"}],8:[function(require,module,exports){
+},{"./../services/HttpRequest.js":17,"./../utils/Promise.js":20,"flummox":"flummox"}],8:[function(require,module,exports){
 "use strict";
 
 var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -727,7 +738,7 @@ var StickyMenu = _interopRequire(require("./../components/StickyMenu.jsx"));
 
 var AreaChart = _interopRequire(require("./../components/AreaChart.jsx"));
 
-require("./../utils/FlatMap.js");
+require("./../utils/Array.js");
 
 var RepoHandler = React.createClass({
   displayName: "RepoHandler",
@@ -841,7 +852,7 @@ var RepoHandler = React.createClass({
 
       var similarItems = this.state.similarItems;
       var readmeContent = this.state.readme;
-      var avatar_url = details.owner && details.owner.avatar_url ? details.owner.avatar_url : "https://cdn2.iconfinder.com/data/icons/metro-ui-dock/512/User_No-Frame.png";
+      var avatar_url = details && details.owner && details.owner.avatar_url ? details.owner.avatar_url : "https://cdn2.iconfinder.com/data/icons/metro-ui-dock/512/User_No-Frame.png";
 
       jsx = React.createElement(
         DocumentTitle,
@@ -896,10 +907,12 @@ var RepoHandler = React.createClass({
 
 module.exports = RepoHandler;
 
-},{"./../components/AreaChart.jsx":8,"./../components/ItemList.jsx":9,"./../components/StickyMenu.jsx":10,"./../utils/FlatMap.js":19,"flummox":"flummox","react":"react","react-document-title":2,"react-router":"react-router"}],13:[function(require,module,exports){
+},{"./../components/AreaChart.jsx":8,"./../components/ItemList.jsx":9,"./../components/StickyMenu.jsx":10,"./../utils/Array.js":19,"flummox":"flummox","react":"react","react-document-title":2,"react-router":"react-router"}],13:[function(require,module,exports){
 "use strict";
 
 var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
+/*jshint -W018, -W040, -W064, -W083, -W086 */
 
 var React = _interopRequire(require("react"));
 
@@ -924,7 +937,7 @@ var DocumentTitle = _interopRequire(require("react-document-title"));
 
 var StickyMenu = _interopRequire(require("./../components/StickyMenu.jsx"));
 
-var debounce = require("./../utils/Utils.js").debounce;
+var debounce = require("./../utils/Timer.js").debounce;
 
 var SearchHandler = React.createClass({
   displayName: "SearchHandler",
@@ -944,14 +957,33 @@ var SearchHandler = React.createClass({
               query = state.path.substring(8);
             }
 
+            state.params = { query: query };
             appActions = flux.getActions("appActions");
-            context$1$0.next = 5;
+            context$1$0.next = 6;
             return appActions.searchItems(query);
 
-          case 5:
+          case 6:
             return context$1$0.abrupt("return", context$1$0.sent);
 
-          case 6:
+          case 7:
+          case "end":
+            return context$1$0.stop();
+        }
+      }, null, this);
+    },
+
+    routerWillRunOnClient: function routerWillRunOnClient(state, flux) {
+      var query;
+      return regeneratorRuntime.async(function routerWillRunOnClient$(context$1$0) {
+        while (1) switch (context$1$0.prev = context$1$0.next) {
+          case 0:
+            query = "javascript";
+
+            if (state.path == "/") {
+              state.params = { query: query };
+            }
+
+          case 2:
           case "end":
             return context$1$0.stop();
         }
@@ -1102,7 +1134,7 @@ var SearchHandler = React.createClass({
 
 module.exports = SearchHandler;
 
-},{"./../components/ItemList.jsx":9,"./../components/StickyMenu.jsx":10,"./../utils/Utils.js":20,"flummox":"flummox","react":"react","react-document-title":2,"react-router":"react-router"}],14:[function(require,module,exports){
+},{"./../components/ItemList.jsx":9,"./../components/StickyMenu.jsx":10,"./../utils/Timer.js":21,"flummox":"flummox","react":"react","react-document-title":2,"react-router":"react-router"}],14:[function(require,module,exports){
 "use strict";
 
 var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -1117,7 +1149,7 @@ var Flux = _interopRequire(require("./Flux.js"));
 
 var routes = _interopRequire(require("./routes.js"));
 
-var performRouteHandlerStaticMethod = require("./utils/Utils.js").performRouteHandlerStaticMethod;
+var performRouteHandlerStaticMethod = require("./utils/Promise.js").performRouteHandlerStaticMethod;
 
 require("babel/polyfill");
 
@@ -1139,7 +1171,7 @@ module.exports = function (divid) {
         while (1) switch (context$3$0.prev = context$3$0.next) {
           case 0:
             context$3$0.next = 2;
-            return performRouteHandlerStaticMethod(state.routes, "routerWillRun", state, flux);
+            return performRouteHandlerStaticMethod(state.routes, "routerWillRunOnClient", state, flux);
 
           case 2:
 
@@ -1160,7 +1192,7 @@ module.exports = function (divid) {
   });
 };
 
-},{"./Flux.js":6,"./libs/waves.js":15,"./routes.js":16,"./utils/Utils.js":20,"babel/polyfill":"babel/polyfill","fastclick":"fastclick","react":"react","react-router":"react-router"}],15:[function(require,module,exports){
+},{"./Flux.js":6,"./libs/waves.js":15,"./routes.js":16,"./utils/Promise.js":20,"babel/polyfill":"babel/polyfill","fastclick":"fastclick","react":"react","react-router":"react-router"}],15:[function(require,module,exports){
 "use strict";
 
 /*!
@@ -1511,10 +1543,11 @@ var SearchHandler = _interopRequire(require("./handlers/SearchHandler.jsx"));
 
 var RepoHandler = _interopRequire(require("./handlers/RepoHandler.jsx"));
 
+// <Redirect from="/" to="search" params={{query: 'javascript'}} /> - Error: Unhandled aborted transition! Reason: [object Object] on server https://github.com/rackt/react-router/issues/612
 var routes = React.createElement(
   Route,
   { handler: AppHandler },
-  React.createElement(Redirect, { from: "/", to: "search", params: { query: "javascript" } }),
+  React.createElement(Route, { name: "home", path: "/", handler: SearchHandler }),
   React.createElement(Route, { name: "search", path: "/search/?:query?", handler: SearchHandler }),
   React.createElement(Route, { name: "repo", path: "/repos/:owner/:repo", handler: RepoHandler })
 );
@@ -1652,30 +1685,100 @@ Array.prototype.flatMap = function (lambda) {
 /*jshint -W018, -W040, -W064, -W083, -W086 */
 
 exports.performRouteHandlerStaticMethod = performRouteHandlerStaticMethod;
-exports.debounce = debounce;
+
+/*
+
+    var myPromise = () => Promise.resolve('qwe');
+    promiseWhile(myPromise, (val, counter) => (counter<2), (counter) => (counter* 500));
+
+*/
+
+exports.retryWhile = retryWhile;
 
 function performRouteHandlerStaticMethod(routes, methodName) {
-  for (var _len = arguments.length, args = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-    args[_key - 2] = arguments[_key];
-  }
-
-  return regeneratorRuntime.async(function performRouteHandlerStaticMethod$(context$1$0) {
-    while (1) switch (context$1$0.prev = context$1$0.next) {
-      case 0:
-        return context$1$0.abrupt("return", Promise.all(routes.map(function (route) {
-          return route.handler[methodName];
-        }).filter(function (method) {
-          return typeof method === "function";
-        }).map(function (method) {
-          return method.apply(undefined, args);
-        })));
-
-      case 1:
-      case "end":
-        return context$1$0.stop();
+    for (var _len = arguments.length, args = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+        args[_key - 2] = arguments[_key];
     }
-  }, null, this);
+
+    return regeneratorRuntime.async(function performRouteHandlerStaticMethod$(context$1$0) {
+        while (1) switch (context$1$0.prev = context$1$0.next) {
+            case 0:
+                return context$1$0.abrupt("return", Promise.all(routes.map(function (route) {
+                    return route.handler[methodName];
+                }).filter(function (method) {
+                    return typeof method === "function";
+                }).map(function (method) {
+                    return method.apply(undefined, args);
+                })));
+
+            case 1:
+            case "end":
+                return context$1$0.stop();
+        }
+    }, null, this);
 }
+
+function retryWhile(promise, predicate, timeout) {
+
+    var c = 1;
+
+    var innerPromiseWhile = function (promise, predicate, timeout, counter) {
+        return new Promise(function (resolve, reject) {
+            promise().then(function (val) {
+                if (predicate(val, counter)) {
+                    setTimeout(function () {
+                        return innerPromiseWhile(promise, predicate, timeout, counter + 1).then(function (val1) {
+                            return resolve(val1);
+                        }, function (err1) {
+                            return reject(err1);
+                        });
+                    }, timeout);
+                } else {
+                    resolve(val);
+                }
+            }, function (err) {
+                return reject(err);
+            });
+        });
+    };
+
+    return innerPromiseWhile(promise, predicate, timeout, c);
+}
+
+// urgly
+Promise.prototype.flatMap = function (lambda) {
+    var that = this;
+    return new Promise(function (resolve, reject) {
+        that.then(function (val) {
+            try {
+                var answer = lambda(val);
+                if (answer.toString() === "[object Promise]") {
+                    answer.then(function (val1) {
+                        return resolve(val1);
+                    }, function (err1) {
+                        return reject(err1);
+                    });
+                } else {
+                    resolve(answer);
+                }
+            } catch (err) {
+                reject(err);
+            }
+        }, function (err) {
+            return reject(err);
+        });
+    });
+};
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+},{}],21:[function(require,module,exports){
+"use strict";
+
+/*jshint -W018, -W040, -W064, -W083, -W086 */
+
+exports.debounce = debounce;
 
 function debounce(func, wait, immediate) {
   var timeout;
