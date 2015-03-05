@@ -397,7 +397,7 @@ var AppActions = (function (Actions) {
               stat = retryWhile(statRequest, function (resp, counter) {
                 return resp.status == 202 && counter < 3;
               }, function (counter) {
-                return counter * 500;
+                return counter * 1000;
               }).then(function (resp) {
                 return resp.body;
               });
@@ -1732,7 +1732,7 @@ function retryWhile(promise, predicate, timeout) {
                         }, function (err1) {
                             return reject(err1);
                         });
-                    }, timeout);
+                    }, timeout(counter));
                 } else {
                     resolve(val);
                 }
