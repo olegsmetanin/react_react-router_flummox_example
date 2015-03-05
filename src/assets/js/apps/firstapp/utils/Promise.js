@@ -28,7 +28,7 @@ export function retryWhile (promise, predicate, timeout) {
           setTimeout(() => {
             return innerPromiseWhile(promise, predicate, timeout, counter+1)
                 .then((val1) => resolve(val1), (err1) => reject(err1))
-          }, timeout);
+          }, timeout(counter));
         } else {
           resolve(val)
         }

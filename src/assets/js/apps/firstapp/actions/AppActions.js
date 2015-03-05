@@ -58,7 +58,7 @@ class AppActions extends Actions {
       let stat = retryWhile(
         statRequest,
         (resp, counter) => (resp.status == 202 && counter < 3),
-        (counter) => counter*500)
+        (counter) => counter*1000)
       .then((resp) => resp.body);
 
       let similarItems = httpRequest
