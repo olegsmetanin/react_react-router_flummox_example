@@ -5,7 +5,7 @@ import React from 'react';
 import Router from 'react-router';
 import Flux from './Flux.js';
 import routes from './routes.js';
-import { performRouteHandlerStaticMethod } from './utils/Utils.js';
+import { performRouteHandlerStaticMethod } from './utils/Promise.js';
 import 'babel/polyfill';
 
 import './libs/waves.js';

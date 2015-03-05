@@ -1,3 +1,6 @@
+"use strict";
+/*jshint -W018, -W040, -W064, -W083, -W086 */
+
 import React from 'react';
 import { Route, RouteHandler, DefaultRoute, State, Link, Redirect } from 'react-router';
 import { Flummox, Actions, Store } from 'flummox';
@@ -5,7 +8,7 @@ import ItemList from './../components/ItemList.jsx';
 import DocumentTitle from 'react-document-title';
 import StickyMenu from './../components/StickyMenu.jsx';
  
-import { debounce } from './../utils/Utils.js';  
+import { debounce } from './../utils/Timer.js';  
 
 let SearchHandler = React.createClass({
   mixins: [State],
@@ -27,7 +30,7 @@ let SearchHandler = React.createClass({
       var query = 'javascript';
       if (state.path == '/') {
         state.params = {query:query};
-      };
+      }
     }
   },
   

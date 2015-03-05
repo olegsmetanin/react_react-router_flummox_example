@@ -5,7 +5,7 @@ import ItemList from './../components/ItemList.jsx';
 import DocumentTitle from 'react-document-title';
 import StickyMenu from './../components/StickyMenu.jsx';
 import AreaChart from './../components/AreaChart.jsx';
-import './../utils/FlatMap.js'; 
+import './../utils/Array.js'; 
 
 let RepoHandler = React.createClass({
   mixins: [State],
@@ -89,7 +89,7 @@ let RepoHandler = React.createClass({
 
       let similarItems = this.state.similarItems;
       let readmeContent = this.state.readme;
-      let avatar_url = (details.owner && details.owner.avatar_url) ? details.owner.avatar_url : 'https://cdn2.iconfinder.com/data/icons/metro-ui-dock/512/User_No-Frame.png';
+      let avatar_url = (details && details.owner && details.owner.avatar_url) ? details.owner.avatar_url : 'https://cdn2.iconfinder.com/data/icons/metro-ui-dock/512/User_No-Frame.png';
 
       jsx = <DocumentTitle title={title}>
       <div>

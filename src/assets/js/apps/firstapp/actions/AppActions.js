@@ -2,6 +2,8 @@
 
 import { Flummox, Actions, Store } from 'flummox';
 import httpRequest from './../services/HttpRequest.js';
+import { retryWhile } from  './../utils/Promise.js';
+
 
 class AppActions extends Actions {
 
@@ -16,7 +18,8 @@ class AppActions extends Actions {
       .query({
         per_page: 50,
       })
-      .exec().then((val) => ({query:query, items:val.body.items}));
+      .exec()
+      .then((val) => ({query:query, items:val.body.items}));
     }
   }
 
@@ -24,40 +27,53 @@ class AppActions extends Actions {
 
       let details = httpRequest
       .get(`https://api.github.com/repos/${ownerName}/${repoName}`)
-      .exec().then((resp) => resp.body); 
+      .exec()
+      .then((resp) => resp.body); 
 
       var readme;
       if (typeof(window) === 'undefined') {
         readme = httpRequest
-          .get(`https://api.github.com/repos/${ownerName}/${repoName}/readme`)    
-          .set('Accept', 'application/vnd.github.V3.html')
-          .parse(httpRequest.parse['text']) //!!! server only
-          .exec().then((resp) => resp.res.text);
+        .get(`https://api.github.com/repos/${ownerName}/${repoName}/readme`)    
+        .set('Accept', 'application/vnd.github.V3.html')
+        .parse(httpRequest.parse['text']) //!!! server only
+        .exec()
+        .then((resp) => resp.res.text);
       } else {
         readme = httpRequest
-          .get(`https://api.github.com/repos/${ownerName}/${repoName}/readme`)    
-          .set('Accept', 'application/vnd.github.V3.html')
-          .exec().then((resp) => resp.text); 
+        .get(`https://api.github.com/repos/${ownerName}/${repoName}/readme`)    
+        .set('Accept', 'application/vnd.github.V3.html')
+        .exec()
+        .then((resp) => resp.text); 
       }
 
       let releases = httpRequest
       .get(`https://api.github.com/repos/${ownerName}/${repoName}/releases`)
-      .exec().then((resp) => resp.body);
+      .exec()
+      .then((resp) => resp.body);
 
-      let stat = httpRequest
+      let statRequest = () => httpRequest
       .get(`https://api.github.com/repos/${ownerName}/${repoName}/stats/commit_activity`)
-      .exec().then((resp) => resp.body)
+      .exec()
+
+      let stat = retryWhile(
+        statRequest,
+        (resp, counter) => (resp.status == 202 && counter < 3),
+        (counter) => counter*500)
+      .then((resp) => resp.body);
 
       let similarItems = httpRequest
       .get(`https://api.github.com/search/repositories?q=${repoName}&sort=stars&order=desc`)
       .query({
         per_page: 50,
       })
-      .exec().then((resp) => resp.body.items)
+      .exec()
+      .then((resp) => resp.body.items)
 
-      return Promise.all([details, readme, releases, stat, similarItems])
-        .then( (val) => ({repoFullName: ownerName+'/'+repoName, details:val[0], readme:val[1], releases:val[2], stat:val[3], similarItems:val[4]}),
-          (error) => ({repoFullName: ownerName+'/'+repoName, error:error})
+      return Promise
+      .all([details, readme, releases, stat, similarItems])
+      .then( 
+        (val) => ({repoFullName: ownerName+'/'+repoName, details:val[0], readme:val[1], releases:val[2], stat:val[3], similarItems:val[4]}),
+        (error) => ({repoFullName: ownerName+'/'+repoName, error:error})
       );
   }
 
