@@ -2,7 +2,7 @@
 
 import { Flummox, Actions, Store } from 'flummox';
 import httpRequest from './../services/HttpRequest.js';
-import { retryWhile } from  './../utils/Promise.js';
+import { PromiseUtils } from  './../utils/Promise.js';
 
 
 class AppActions extends Actions {
@@ -55,10 +55,13 @@ class AppActions extends Actions {
       .get(`https://api.github.com/repos/${ownerName}/${repoName}/stats/commit_activity`)
       .exec()
 
-      let stat = retryWhile(
-        statRequest,
-        (resp, counter) => (resp.status == 202 && counter < 3),
-        (counter) => counter*1000)
+      let stat = PromiseUtils.retry({
+        what: () => httpRequest
+          .get(`https://api.github.com/repos/${ownerName}/${repoName}/stats/commit_activity`)
+          .exec(),
+        when: (resp, counter) => (resp.status == 202 && counter < 3),
+        wait: (counter) => counter*1000
+      })
       .then((resp) => resp.body);
 
       let similarItems = httpRequest
