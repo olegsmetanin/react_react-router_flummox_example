@@ -319,7 +319,7 @@ var Store = _flummox.Store;
 
 var httpRequest = _interopRequire(require("./../services/HttpRequest.js"));
 
-var retryWhile = require("./../utils/Promise.js").retryWhile;
+var PromiseUtils = require("./../utils/Promise.js").PromiseUtils;
 
 var AppActions = (function (Actions) {
   function AppActions() {
@@ -394,10 +394,16 @@ var AppActions = (function (Actions) {
                 return httpRequest.get("https://api.github.com/repos/" + ownerName + "/" + repoName + "/stats/commit_activity").exec();
               };
 
-              stat = retryWhile(statRequest, function (resp, counter) {
-                return resp.status == 202 && counter < 3;
-              }, function (counter) {
-                return counter * 1000;
+              stat = PromiseUtils.retry({
+                what: function () {
+                  return httpRequest.get("https://api.github.com/repos/" + ownerName + "/" + repoName + "/stats/commit_activity").exec();
+                },
+                when: function (resp, counter) {
+                  return resp.status == 202 && counter < 3;
+                },
+                wait: function (counter) {
+                  return counter * 1000;
+                }
               }).then(function (resp) {
                 return resp.body;
               });
@@ -1682,18 +1688,13 @@ Array.prototype.flatMap = function (lambda) {
 },{}],20:[function(require,module,exports){
 "use strict";
 
+var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
 /*jshint -W018, -W040, -W064, -W083, -W086 */
 
 exports.performRouteHandlerStaticMethod = performRouteHandlerStaticMethod;
-
-/*
-
-    var myPromise = () => Promise.resolve('qwe');
-    promiseWhile(myPromise, (val, counter) => (counter<2), (counter) => (counter* 500));
-
-*/
-
-exports.retryWhile = retryWhile;
 
 function performRouteHandlerStaticMethod(routes, methodName) {
     for (var _len = arguments.length, args = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
@@ -1718,32 +1719,62 @@ function performRouteHandlerStaticMethod(routes, methodName) {
     }, null, this);
 }
 
-function retryWhile(promise, predicate, timeout) {
+/*
 
-    var c = 1;
+      let stat = PromiseUtils.retry({
+        what: () => httpRequest
+          .get(`https://api.github.com/repos/${ownerName}/${repoName}/stats/commit_activity`)
+          .exec(),
+        when: (resp, counter) => (resp.status == 202 && counter < 3),
+        wait: (counter) => counter*1000
+      })
+      .then((resp) => resp.body);
 
-    var innerPromiseWhile = function (promise, predicate, timeout, counter) {
-        return new Promise(function (resolve, reject) {
-            promise().then(function (val) {
-                if (predicate(val, counter)) {
-                    setTimeout(function () {
-                        return innerPromiseWhile(promise, predicate, timeout, counter + 1).then(function (val1) {
-                            return resolve(val1);
-                        }, function (err1) {
-                            return reject(err1);
+*/
+
+var PromiseUtils = exports.PromiseUtils = (function () {
+    function PromiseUtils() {
+        _classCallCheck(this, PromiseUtils);
+    }
+
+    _prototypeProperties(PromiseUtils, {
+        retry: {
+            value: function retry(options) {
+
+                var c = 1,
+                    promise = options.what,
+                    predicate = options.when,
+                    timeout = options.wait;
+
+                var innerPromiseWhile = function (promise, predicate, timeout, counter) {
+                    return new Promise(function (resolve, reject) {
+                        promise().then(function (val) {
+                            if (predicate(val, counter)) {
+                                setTimeout(function () {
+                                    return innerPromiseWhile(promise, predicate, timeout, counter + 1).then(function (val1) {
+                                        return resolve(val1);
+                                    }, function (err1) {
+                                        return reject(err1);
+                                    });
+                                }, timeout(counter));
+                            } else {
+                                resolve(val);
+                            }
+                        }, function (err) {
+                            return reject(err);
                         });
-                    }, timeout(counter));
-                } else {
-                    resolve(val);
-                }
-            }, function (err) {
-                return reject(err);
-            });
-        });
-    };
+                    });
+                };
 
-    return innerPromiseWhile(promise, predicate, timeout, c);
-}
+                return innerPromiseWhile(promise, predicate, timeout, c);
+            },
+            writable: true,
+            configurable: true
+        }
+    });
+
+    return PromiseUtils;
+})();
 
 // urgly
 Promise.prototype.flatMap = function (lambda) {
