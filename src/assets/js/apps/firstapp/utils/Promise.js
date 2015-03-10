@@ -54,23 +54,3 @@ export class PromiseUtils {
 
     }
 }
-
-// urgly
-Promise.prototype.flatMap = function(lambda) {
-    let that = this;
-    return new Promise((resolve, reject) => {
-        that.then((val) => {
-            try {
-                let answer = lambda(val);
-                if (answer.toString() === '[object Promise]') {
-                    answer.then((val1) => resolve(val1), (err1) => reject(err1))
-                } else {
-                    resolve(answer)
-                }
-            } catch (err) {
-                reject(err);
-            }
-        }, (err) => reject(err));
-
-    })
-};
