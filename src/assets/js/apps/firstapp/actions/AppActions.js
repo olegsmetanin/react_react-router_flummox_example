@@ -1,7 +1,7 @@
 /*jshint -W018, -W040, -W064, -W083, -W086 */
 
 import { Flummox, Actions, Store } from 'flummox';
-import httpRequest from './../services/HttpRequest.js';
+import httpRequest from './../utils/HttpRequest.js';
 import { PromiseUtils } from  './../utils/Promise.js';
 
 
