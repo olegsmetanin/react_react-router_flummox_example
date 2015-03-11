@@ -94,10 +94,10 @@ gulp.task('deploypages', function() {
         .pipe(deploypages());
 });
 
-gulp.task('watch', ['webpack-watch'], function() {
+gulp.task('watch', function() {
     gulp.watch('./src/assets/scss/**', ['styles']);
     gulp.watch('./src/assets/icons/**', ['iconfont']);
     gulp.watch(['./src/**', '!./src/assets/**'], ['html']);
 });
 
-gulp.task('default', ['lint', 'styles', 'html', /* 'img', */ 'watch']);
+gulp.task('default', ['lint', 'styles', 'html', /* 'img', */ 'watch', 'webpack-watch']);
