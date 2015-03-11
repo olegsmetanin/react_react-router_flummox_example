@@ -25,6 +25,8 @@
   },
   "devDependencies": {
     "babel": "latest",
+    "babel-core": "^4.7.8",
+    "babel-loader": "^4.1.0",
     "babelify": "latest",
     "browserify": "latest",
     "exorcist": "latest",
@@ -35,12 +37,15 @@
     "gulp-jshint": "latest",
     "gulp-sass": "latest",
     "gulp-sketch": "latest",
+    "gulp-webpack": "^1.3.0",
+    "json-loader": "^0.5.1",
     "mocha": "^2.2.1",
     "node-bourbon": "latest",
     "should": "^5.1.0",
     "should-promised": "^0.1.0",
     "uglifyify": "latest",
-    "vinyl-source-stream": "latest"
+    "vinyl-source-stream": "latest",
+    "webpack": "^1.7.2"
   },
   "engines": {
     "node": ">=0.10.0"

@@ -12,93 +12,25 @@ var gulp = require('gulp'),
     sketch = require("gulp-sketch"),
     iconfont = require('gulp-iconfont'),
     bourbon = require('node-bourbon').includePaths,
-    deploypages = require('gulp-gh-pages');
+    deploypages = require('gulp-gh-pages'),
+    webpack = require('gulp-webpack');
 
 var dest = './dest',
     fontName = 'appfont';
 
-gulp.task('apps', function() {
-
-    var bundler = browserify({
-            debug: true
-        })
-        .transform(babelify.configure({
-            experimental: true
-        }))
-        .require('./src/assets/js/apps/apps.js', {
-            expose: 'apps'
-        })
-        .external('babel/polyfill')
-        .external('react')
-        .external('react-router')
-        .external('flummox')
-        .external('jquery')
-        .external('superagent')
-        .external('cheerio')
-        .external('fastclick')
-        .external('d3')
-        .external('lru-cache');
-
-
-    return bundler.bundle()
-        .on('error', function(err) {
-            console.log(err.toString());
-            this.emit('end');
-        })
-        .pipe(exorcist(dest + '/assets/js/apps.js.map'))
-        .pipe(source('apps.js'))
-        .pipe(gulp.dest(dest + '/assets/js'));
-
+gulp.task("webpack", function() {
+    var config = require('./webpack.config.js');
+    return gulp.src('src/index.js')
+      .pipe(webpack(config))
+      .pipe(gulp.dest(dest+'/assets/js/'));
 });
 
-gulp.task('lib', function() {
-
-    var bundler = browserify({
-            debug: false
-        })
-        .transform({
-            global: true
-        }, 'uglifyify')
-        .require('./node_modules/babel/polyfill.js', {
-            expose: 'babel/polyfill'
-        })
-        .require('./node_modules/react/dist/react.js', {
-            expose: 'react'
-        })
-        .require('./node_modules/react-router/lib/index.js', {
-            expose: 'react-router'
-        })
-        .require('./node_modules/flummox/lib/Flux.js', {
-            expose: 'flummox'
-        })
-        .require('./node_modules/jquery/dist/jquery.js', {
-            expose: 'jquery'
-        })     
-        .require('./node_modules/superagent/lib/client.js', {
-            expose: 'superagent'
-        })
-        .require('./node_modules/cheerio/index.js', {
-            expose: 'cheerio'
-        })
-        .require('./node_modules/fastclick/lib/fastclick.js', {
-            expose: 'fastclick'
-        })
-        .require('./node_modules/d3/index.js', {
-            expose: 'd3'
-        })
-        .require('./node_modules/lru-cache/lib/lru-cache.js', {
-            expose: 'lru-cache'
-        });
-
-    return bundler.bundle()
-        .on('error', function(err) {
-            console.log(err.toString());
-            this.emit('end');
-        })
-        .pipe(exorcist(dest + '/assets/js/lib.js.map'))
-        .pipe(source('lib.js'))
-        .pipe(gulp.dest(dest + '/assets/js'));
-
+gulp.task("webpack-watch", function() {
+    var config = require('./webpack.config.js');
+    config.watch = true;
+    return gulp.src('src/index.js')
+      .pipe(webpack(config))
+      .pipe(gulp.dest(dest+'/assets/js/'));
 });
 
 gulp.task('styles', function() {
@@ -162,12 +94,10 @@ gulp.task('deploypages', function() {
         .pipe(deploypages());
 });
 
-gulp.task('watch', function() {
-    gulp.watch('./src/assets/js/apps/**', ['apps']);
-    gulp.watch('./src/assets/js/lib/**', ['lib']);
+gulp.task('watch', ['webpack-watch'], function() {
     gulp.watch('./src/assets/scss/**', ['styles']);
     gulp.watch('./src/assets/icons/**', ['iconfont']);
     gulp.watch(['./src/**', '!./src/assets/**'], ['html']);
 });
 
-gulp.task('default', ['apps', 'lib', 'lint', 'styles', 'html', /* 'img', */ 'watch']);
+gulp.task('default', ['lint', 'styles', 'html', /* 'img', */ 'watch']);

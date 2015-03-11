@@ -9,10 +9,10 @@ import { performRouteHandlerStaticMethod } from './utils/Promise.js';
 import 'babel/polyfill';
 
 import './libs/waves.js';
-import attachFastClick from 'fastclick';
+import FastClick from 'fastclick';
 
 window.Waves.displayEffect();
-attachFastClick(document.body);
+FastClick.attach(document.body);
 
 export default function(divid) {
 
