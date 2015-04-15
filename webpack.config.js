@@ -27,8 +27,8 @@ module.exports = {
   cache: true,
   module: {
     loaders: [
-      { test: /\.jsx?$/, loaders: ['babel-loader?experimental'], exclude: /node_modules/ },
-      { test: /\.js?$/, loaders: ['babel-loader?experimental'], exclude: /node_modules/ },
+      { test: /\.jsx?$/, loaders: ['babel-loader?stage=1'], exclude: /node_modules/ },
+      { test: /\.js?$/, loaders: ['babel-loader?stage=1'], exclude: /node_modules/ },
       { test: /\.json$/, loader: "json-loader" }
     ]
   }

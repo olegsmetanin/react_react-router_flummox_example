@@ -15,7 +15,7 @@ export default function (req, res) {
   let flux = new Flux();
 
   Router.run(routes, req.url, function (Handler, state) {
-    
+
     async function run() {
 
       await performRouteHandlerStaticMethod(state.routes, 'routerWillRunOnServer', state, flux);
@@ -23,7 +23,7 @@ export default function (req, res) {
       React.withContext(
         { flux },
         () => {
-          
+
           let content = React.renderToString(<Handler />);
           let title = DocumentTitle.rewind();
 
@@ -46,7 +46,7 @@ export default function (req, res) {
                 <script type="text/javascript" src="/assets/js/lib.js"></script>
                 <script type="text/javascript" src="/assets/js/apps.js"></script>
                 <script>
-                require('apps').firstapp('app');
+                require('app')('app');
                 </script>
               </body>
             </html>`)

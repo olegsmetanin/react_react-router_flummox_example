@@ -20,18 +20,18 @@
     "url": "https://github.com/olegsmetanin/react_react-router_flummox_example.git"
   },
   "scripts": {
-    "server": "babel-node --experimental server/server.js",
+    "server": "babel-node --stage 1 server/server.js",
     "test": "mocha ./test/test.es7.js"
   },
   "devDependencies": {
-    "babel": "latest",
-    "babel-core": "^4.7.8",
-    "babel-loader": "^4.1.0",
+    "babel": "^5.1.9",
+    "babel-core": "^5.1.9",
+    "babel-loader": "^5.0.0",
     "babelify": "latest",
     "browserify": "latest",
     "exorcist": "latest",
     "gulp": "latest",
-    "gulp-babel": "^4.0.0",
+    "gulp-babel": "^5.1.0",
     "gulp-gh-pages": "latest",
     "gulp-iconfont": "latest",
     "gulp-jshint": "latest",
