@@ -1,5 +1,5 @@
 {
-  "name": "react_react-router_flummox_browserify_example",
+  "name": "react_react-router_flummox_webpack_example",
   "version": "0.0.1",
   "dependencies": {
     "body-parser": "latest",
@@ -20,7 +20,7 @@
     "url": "https://github.com/olegsmetanin/react_react-router_flummox_example.git"
   },
   "scripts": {
-    "server": "babel-node --stage 1 server/server.js",
+    "start": "babel-node --stage 1 server/server.js",
     "test": "mocha ./test/test.es7.js"
   },
   "devDependencies": {

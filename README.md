@@ -1,27 +1,31 @@
 # Simple example of isomorphic react
 
-[Demo page https://olegsmetanin.github.io/react_react-router_flummox_example/#/search/javascript](https://olegsmetanin.github.io/react_react-router_flummox_example/#/search/javascript) 
+[Demo page https://olegsmetanin.github.io/react_react-router_flummox_example/#/search/javascript](https://olegsmetanin.github.io/react_react-router_flummox_example/#/search/javascript)
 
 Using:
 
-* [es7 (babel)](https://babeljs.io/)
+* [es6 (babel)](https://babeljs.io/)
 
-* [react](http://facebook.github.io/react/)
+* [react 0.12.2 (!Old)](http://facebook.github.io/react/)
 
 * [react-router](https://github.com/rackt/react-router)
 
 * [flummox](https://github.com/acdlite/flummox)
 
-* [browserify](http://browserify.org/)
+* [webpack](http://webpack.github.io/)
 
 Steps:
 
-1. npm install
+1. git clone https://github.com/olegsmetanin/react_react-router_flummox_example.git
 
-2. gulp
+2. cd react_react-router_flummox_example
 
-3. open ./dest/index.html in browser to view client-side rendering only or
+3. npm install
 
-4. run "npm run server"
+4. gulp
 
-5. open https://localhost:8080 to view server-side rendering
+5. open ./dest/index.html in browser to view client-side rendering only or
+
+6. run "npm run start"
+
+7. open https://localhost:8080 to view server-side rendering
