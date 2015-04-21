@@ -1,5 +1,5 @@
 'use strict';
-/*jshint -W018, -W040, -W064, -W083, -W086 */
+/*jshint -W018, -W030, -W040, -W064, -W083, -W086 */
 
 import React from 'react';
 import Router from 'react-router';
@@ -16,7 +16,7 @@ FastClick.attach(document.body);
 
 export default function(divid) {
 
-  let flux = new Flux(); 
+  let flux = new Flux();
 
   Router.run(routes, (Handler, state) => {
 

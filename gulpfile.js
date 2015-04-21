@@ -75,7 +75,7 @@ gulp.task('img', function() {
 gulp.task("prelint", function() {
     return gulp.src('./src/assets/js/apps/**')
         .pipe(babel({
-            experimental: true
+            stage: 1
         }))
         .pipe(gulp.dest('./tmp/src'));
 });

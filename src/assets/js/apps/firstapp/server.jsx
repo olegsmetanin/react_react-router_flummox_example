@@ -1,5 +1,5 @@
 'use strict';
-/*jshint -W018, -W040, -W064, -W083, -W086 */
+/*jshint -W018, -W030, -W040, -W064, -W083, -W086 */
 
 import React from 'react';
 import Router from 'react-router';
@@ -60,4 +60,4 @@ export default function (req, res) {
     });
 
   });
-};
+}
